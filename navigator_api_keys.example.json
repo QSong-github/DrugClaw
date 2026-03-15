@@ -1,0 +1,4 @@
+{
+  "OPENAI_API_KEY": "replace-with-your-api-key",
+  "base_url": "https://your-endpoint.com/v1"
+}

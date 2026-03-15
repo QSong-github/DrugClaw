@@ -51,7 +51,13 @@ pip install bioservices
 
 ### 2. 准备 `navigator_api_keys.json`
 
-项目根目录下使用如下格式：
+先复制模板文件：
+
+```bash
+cp navigator_api_keys.example.json navigator_api_keys.json
+```
+
+然后填写你自己的真实凭证。模板格式如下：
 
 ```json
 {
