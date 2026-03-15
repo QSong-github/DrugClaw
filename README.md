@@ -65,11 +65,37 @@ pip install bioservices
 - 环境变量 `DRUGCLAW_KEY_FILE`
 - 仓库根目录下的 `navigator_api_keys.json`
 
-### 3. 直接运行官方 CLI Demo
+### 3. 准备本地资源目录 `resources_metadata/`
+
+不少 skill 的访问模式是 `LOCAL_FILE`。这类资源需要你先把数据放到当前仓库的 `resources_metadata/` 目录，不能默认依赖在线接口。
+
+推荐的数据解析顺序：
+
+- 先用当前仓库里已经存在的 `resources_metadata/...`
+- 如果本地缺失，优先从维护好的镜像仓库同步
+- 只有镜像也没有时，再回到原始官网或数据下载页手动获取
+
+当前维护的镜像仓库：
+
+- `https://huggingface.co/datasets/Mike2481/DrugClaw_resources_data`
+
+目录约定示例：
+
+- `resources_metadata/dti/...`
+- `resources_metadata/adr/...`
+- `resources_metadata/drug_knowledgebase/...`
+- `resources_metadata/drug_repurposing/...`
+- `resources_metadata/ddi/...`
+
+如果某些 `SKILL.md`、`example.py` 或旧文档里还保留历史绝对路径，只把它们当旧示例；实际应以当前仓库下的 `resources_metadata/...` 为准。
+
+### 4. 直接运行官方 CLI Demo
 
 这是当前最推荐的体验入口。无需安装也可以直接用模块方式运行：
 
 ```bash
+python -m drugclaw list
+python -m drugclaw doctor
 python -m drugclaw demo
 ```
 
@@ -85,16 +111,17 @@ python -m drugclaw demo
 python -m drugclaw run --query "What are the known drug targets of imatinib?"
 ```
 
-### 4. 安装后直接使用 `drugclaw` 命令
+### 5. 安装后直接使用 `drugclaw` 命令
 
 ```bash
 pip install -e . --no-build-isolation
+drugclaw list
 drugclaw doctor
 drugclaw demo
 drugclaw run --query "What are the known drug targets of imatinib?"
 ```
 
-### 5. 兼容快捷方式：`run_minimal.py`
+### 6. 兼容快捷方式：`run_minimal.py`
 
 这个脚本现在等价于一个 demo 快捷入口：
 
@@ -109,7 +136,7 @@ python run_minimal.py demo --preset label
 python run_minimal.py run --query "What prescribing and safety information is available for metformin?"
 ```
 
-### 6. 先做环境自检
+### 7. 先做环境自检
 
 如果你想先确认本地环境是否具备体验条件，可以执行：
 
@@ -124,7 +151,20 @@ python -m drugclaw doctor
 - 内置 demo 依赖的资源当前是否具备运行条件
 - 是否已经安装出 `drugclaw` 命令
 
-### 7. 如果你想自己写调用代码
+### 8. 查看内置 demo 和推荐入口
+
+```bash
+python -m drugclaw list
+```
+
+它会列出：
+
+- 内置 demo 预设
+- 三种思考模式
+- 推荐的首条体验命令
+- 常用资源组合
+
+### 9. 如果你想自己写调用代码
 
 ```python
 from drugclaw.config import Config
@@ -143,7 +183,7 @@ result = system.query(
 print(result["answer"])
 ```
 
-### 8. 三种思考模式
+### 10. 三种思考模式
 
 ```python
 from drugclaw.models import ThinkingMode
@@ -160,6 +200,12 @@ system.query("...", thinking_mode=ThinkingMode.WEB_ONLY)
 每个 skill 都带有自己的 `SKILL.md` 和 `example.py`。Code Agent 会读取这两份材料，理解资源原生调用方式，自动生成针对当前问题的查询代码并执行。
 
 这意味着 DrugClaw 不需要强迫所有数据库、API、数据集都长成同一种接口。
+
+对于 `LOCAL_FILE` 类型的 skill，推荐的默认行为是：
+
+- 先检查当前仓库的 `resources_metadata/...`
+- 若缺失，再提示使用 Hugging Face 镜像仓库补齐
+- 不要默认假设原始下载链接仍然可用
 
 ### 2. 明确围绕药物任务组织
 

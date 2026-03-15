@@ -99,6 +99,11 @@ def build_parser() -> argparse.ArgumentParser:
         help="Path to navigator_api_keys.json.",
     )
 
+    subparsers.add_parser(
+        "list",
+        help="List built-in demos, modes, and recommended first commands.",
+    )
+
     return parser
 
 
@@ -242,6 +247,37 @@ def _run_doctor(key_file: str) -> int:
     return 0
 
 
+def _run_list() -> int:
+    print("[DrugClaw list] quick navigation")
+
+    print("\n== Recommended First Commands ==")
+    print("python -m drugclaw doctor")
+    print("python -m drugclaw demo")
+    print('python -m drugclaw run --query "What are the known drug targets of imatinib?"')
+
+    print("\n== Built-in Demos ==")
+    for name, preset in DEMO_PRESETS.items():
+        print(f"- {name}: {preset['description']}")
+        print(f"  mode={preset['mode']}  resources={', '.join(preset['resource_filter'])}")
+        print(f"  query={preset['query']}")
+
+    print("\n== Thinking Modes ==")
+    print("- graph: full retrieve -> graph build -> rerank -> respond -> reflect")
+    print("- simple: fastest default for first-time users")
+    print("- web_only: only web and literature search")
+
+    print("\n== Common Resource Filters ==")
+    print("- ADR: SIDER,FAERS")
+    print("- DTI: ChEMBL,DGIdb,Open Targets Platform")
+    print("- Labeling: DailyMed,openFDA Human Drug,MedlinePlus Drug Info")
+    print("- DDI: DDInter,MecDDI,KEGG Drug")
+
+    print("\n== Notes ==")
+    print("- Prefer `demo` or `run --mode simple` for the first experience.")
+    print("- Use `doctor` first if you are unsure whether local resources are ready.")
+    return 0
+
+
 def _run_query(
     *,
     query: str,
@@ -276,6 +312,9 @@ def main(argv: List[str] | None = None) -> int:
 
     if args.command == "doctor":
         return _run_doctor(args.key_file)
+
+    if args.command == "list":
+        return _run_list()
 
     preset = DEMO_PRESETS[args.preset]
     print(f"[DrugClaw demo] preset={args.preset} - {preset['description']}")
