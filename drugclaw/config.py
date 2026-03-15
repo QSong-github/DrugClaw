@@ -18,7 +18,7 @@ class Config:
         os.environ['TOOLKIT_API_KEY'] = self.OPENAI_API_KEY
 
         # Model settings
-        self.MODEL_NAME = "gpt-oss-120b"
+        self.MODEL_NAME = "claude-4.5-sonnet"
         self.TEMPERATURE = 0.7
         self.MAX_TOKENS = 2000
 
