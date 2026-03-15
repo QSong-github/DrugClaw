@@ -121,6 +121,7 @@ python -m drugclaw run --query "What are the known drug targets of imatinib?"
 
 ```bash
 pip install -e . --no-build-isolation
+git config core.hooksPath .githooks
 drugclaw list
 drugclaw doctor
 drugclaw demo
@@ -156,8 +157,21 @@ python -m drugclaw doctor
 - `langgraph` 和 `openai` 是否可导入
 - 内置 demo 依赖的资源当前是否具备运行条件
 - 是否已经安装出 `drugclaw` 命令
+- `navigator_api_keys.json` 是否仍被 Git 跟踪
+- 是否已启用仓库自带的 Git hooks
 
-### 8. 查看内置 demo 和推荐入口
+### 8. 启用防泄露 Git hooks
+
+```bash
+git config core.hooksPath .githooks
+```
+
+启用后会阻止：
+
+- 提交 `navigator_api_keys.json`
+- 推送一个仍在被 Git 跟踪的 `navigator_api_keys.json`
+
+### 9. 查看内置 demo 和推荐入口
 
 ```bash
 python -m drugclaw list
@@ -170,7 +184,7 @@ python -m drugclaw list
 - 推荐的首条体验命令
 - 常用资源组合
 
-### 9. 如果你想自己写调用代码
+### 10. 如果你想自己写调用代码
 
 ```python
 from drugclaw.config import Config
@@ -189,7 +203,7 @@ result = system.query(
 print(result["answer"])
 ```
 
-### 10. 三种思考模式
+### 11. 三种思考模式
 
 ```python
 from drugclaw.models import ThinkingMode

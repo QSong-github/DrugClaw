@@ -1,0 +1,10 @@
+#!/usr/bin/env bash
+set -euo pipefail
+
+blocked_file="navigator_api_keys.json"
+
+if git diff --cached --name-only | grep -Fxq "$blocked_file"; then
+  echo "[DrugClaw hook] Refusing to commit $blocked_file"
+  echo "Use navigator_api_keys.example.json as the committed template."
+  exit 1
+fi

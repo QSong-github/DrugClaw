@@ -222,12 +222,31 @@ def _doctor_check_install_hint() -> List[str]:
     return [_status_line("cli_command", installed_as_script, detail)]
 
 
+def _doctor_check_git_safety() -> List[str]:
+    lines: List[str] = []
+    tracked = os.system("git ls-files --error-unmatch navigator_api_keys.json >/dev/null 2>&1") == 0
+    lines.append(
+        _status_line(
+            "tracked_key_file",
+            not tracked,
+            "not tracked" if not tracked else "navigator_api_keys.json is still tracked by Git",
+        )
+    )
+
+    hooks_path = os.popen("git config --get core.hooksPath").read().strip()
+    hooks_enabled = hooks_path == ".githooks"
+    hook_detail = hooks_path or "not configured; run `git config core.hooksPath .githooks`"
+    lines.append(_status_line("hooks_path", hooks_enabled, hook_detail))
+    return lines
+
+
 def _run_doctor(key_file: str) -> int:
     sections = [
         ("Configuration", _doctor_check_key_file(key_file)),
         ("Imports", _doctor_check_imports()),
         ("Demo Presets", _doctor_check_presets(key_file)),
         ("CLI", _doctor_check_install_hint()),
+        ("Git Safety", _doctor_check_git_safety()),
     ]
 
     print("[DrugClaw doctor] local readiness check")

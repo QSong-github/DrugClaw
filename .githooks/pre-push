@@ -1,0 +1,14 @@
+#!/usr/bin/env bash
+set -euo pipefail
+
+blocked_file="navigator_api_keys.json"
+
+if git diff --cached --name-only | grep -Fxq "$blocked_file"; then
+  echo "[DrugClaw hook] Refusing to push because $blocked_file is staged."
+  exit 1
+fi
+
+if git ls-files --error-unmatch "$blocked_file" >/dev/null 2>&1; then
+  echo "[DrugClaw hook] Refusing to push because $blocked_file is tracked by Git."
+  exit 1
+fi
