@@ -19,16 +19,102 @@ DrugClaw 是一个围绕药物任务构建的多智能体 RAG 系统，专门处
 
 它不是“通用 RAG 套一层生物医学提示词”，而是从资源组织、检索策略、推理链路到回答形式，都明确面向 drug-native 场景设计。
 
-
 ## 为什么是 DrugClaw
 
 大多数生物医学问答系统停留在“检索几段文本然后总结”的层面，DrugClaw 更进一步：
+
+- 现有不少工具更偏向通用 biomedical assistant，能做概括，但往往不擅长药物任务里真正关键的细节，例如靶点证据、ADR 来源、DDI 机制、标签信息和 PGx 约束。
+- 另一类工具虽然接了很多数据库，却常常把所有资源硬塞进同一种接口，结果是抽象看起来统一了，但资源本身的表达力被削弱了，复杂查询也更难做深。
+- 还有一些系统更强调对话体验或代理外壳，但底层缺少足够密集、结构化且可追溯的药物资源支撑，最后还是回到“语言流畅但证据偏薄”的问题。
 
 - 将 **68 个精选药物资源**组织为可导航的 **15 类技能树**。
 - 通过 **Code Agent** 为不同资源现写查询代码，而不是强行塞进单一死板接口。
 - 支持 **图结构推理**，更适合多跳药物证据综合。
 - 保留 **Web Search** 作为最新文献和外部证据的补充通道。
 - 从设计上就面向 **药物原生任务**，而不是泛化的 biomedical branding。
+
+换句话说，DrugClaw 的优势不是“再做一个会说话的助手”，而是尽量把药物资源的密度、检索的真实性和证据综合能力同时拉起来。它更适合回答那些需要跨多个资源交叉验证、需要说明证据来自哪里、以及需要把检索结果进一步组织成推理链的问题。
+
+
+## 快速开始
+
+### 1. 安装依赖
+
+```bash
+cd /data/boom/Agent/DrugClaw
+pip install langgraph openai
+```
+
+可选依赖，仅在你要启用对应 CLI 型 skill 时安装：
+
+```bash
+pip install chembl_webresource_client
+pip install libchebipy
+pip install bioservices
+```
+
+### 2. 准备 `navigator_api_keys.json`
+
+项目根目录下使用如下格式：
+
+```json
+{
+  "OPENAI_API_KEY": "your-api-key-here",
+  "base_url": "https://your-endpoint.com/v1"
+}
+```
+
+当前版本会优先读取：
+
+- 环境变量 `DRUGCLAW_KEY_FILE`
+- 仓库根目录下的 `navigator_api_keys.json`
+
+### 3. 直接运行最小体验脚本
+
+这是当前仓库最稳的体验入口。它会固定使用：
+
+- `SIMPLE` 模式
+- `SIDER` + `FAERS`
+- 默认 ADR 查询
+
+```bash
+python run_minimal.py
+```
+
+也可以自己传入问题：
+
+```bash
+python run_minimal.py --query "What are the known adverse drug reactions of aspirin?"
+```
+
+### 4. 如果你想自己写调用代码
+
+```python
+from drugclaw.config import Config
+from drugclaw.main_system import DrugClawSystem
+from drugclaw.models import ThinkingMode
+
+config = Config(key_file="navigator_api_keys.json")
+system = DrugClawSystem(config)
+
+result = system.query(
+    "What are the known adverse drug reactions of aspirin?",
+    thinking_mode=ThinkingMode.SIMPLE,
+    resource_filter=["SIDER", "FAERS"],
+)
+
+print(result["answer"])
+```
+
+### 5. 三种思考模式
+
+```python
+from drugclaw.models import ThinkingMode
+
+system.query("...", thinking_mode=ThinkingMode.GRAPH)
+system.query("...", thinking_mode=ThinkingMode.SIMPLE)
+system.query("...", thinking_mode=ThinkingMode.WEB_ONLY)
+```
 
 ## 核心亮点
 
@@ -67,73 +153,6 @@ DrugClaw 适合回答的问题包括：
 - “哪些已批准药物可能重定位到三阴性乳腺癌？”
 - “氯吡格雷与 CYP2C19 有哪些药物基因组学建议？”
 - “华法林与 NSAIDs 之间是否存在临床上重要的相互作用？”
-
-
-## 快速开始
-
-### 1. 安装依赖
-
-```bash
-pip install langgraph openai
-
-# 可选：为部分 CLI 型 skill 安装额外依赖
-pip install chembl_webresource_client
-pip install libchebipy
-pip install bioservices
-```
-
-### 2. 准备 API Key 文件
-
-在项目根目录创建 `navigator_api_keys.json`：
-
-```json
-{
-  "OPENAI_API_KEY": "your-api-key-here",
-  "base_url": "https://your-endpoint.com/v1"
-}
-```
-
-说明：
-
-- 当前 `drugclaw/config.py` 中的默认 key 路径指向作者原始开发环境。
-- 在你自己的环境中，建议显式传入本地 key 文件路径。
-
-### 3. 最小调用示例
-
-```python
-from drugclaw.config import Config
-from drugclaw.main_system import DrugClawSystem
-from drugclaw.models import ThinkingMode
-
-config = Config(key_file="navigator_api_keys.json")
-system = DrugClawSystem(config)
-
-result = system.query(
-    "What are the known drug targets and adverse effects of imatinib?",
-    thinking_mode=ThinkingMode.GRAPH,
-)
-
-print(result["answer"])
-```
-
-### 4. 三种思考模式
-
-```python
-from drugclaw.models import ThinkingMode
-
-system.query("...", thinking_mode=ThinkingMode.GRAPH)
-system.query("...", thinking_mode=ThinkingMode.SIMPLE)
-system.query("...", thinking_mode=ThinkingMode.WEB_ONLY)
-```
-
-### 5. 指定资源检索
-
-```python
-result = system.query(
-    "What are the adverse effects of aspirin?",
-    resource_filter=["FAERS", "SIDER"],
-)
-```
 
 ## 架构
 
@@ -225,7 +244,6 @@ DrugClaw 可以把自由文本检索结果进一步转成三元组、子图、�
 - 当前仓库在项目根目录下可直接导入运行。
 - `pyproject.toml` 的打包配置与当前目录结构还没有完全对齐。
 - 部分 skill 依赖 `resources_metadata/` 下的本地数据文件。
-- 部分默认配置路径仍然保留作者开发机路径。
 - 默认 `GRAPH` 模式的多轮迭代能力还依赖进一步配置，例如 `MAX_ITERATIONS`。
 
 ## 引用
