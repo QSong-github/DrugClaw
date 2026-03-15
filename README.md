@@ -1,308 +1,318 @@
-# DrugClaw — Drug-Specialized Agentic RAG System
+# DrugClaw
 
-A multi-agent agentic RAG system purpose-built for drug knowledge retrieval, reasoning, and synthesis. DrugClaw integrates **68 curated LLM-friendly drug resources** across **15 drug-specific subcategories**, with **25 fully implemented skills** and a vibe-coding Code Agent architecture.
+<p align="center">
+  <img src="./DrugClaw.png" alt="DrugClaw" width="220" />
+</p>
 
-## Overview
+<p align="center">
+  <strong>Drug-Specialized Agentic RAG for Retrieval, Reasoning, and Evidence Synthesis</strong>
+</p>
 
-DrugClaw implements an iterative, evidence-driven agentic pipeline powered by LangGraph. Six specialized agents collaborate to retrieve, rank, synthesize, and evaluate drug knowledge — covering drug-target interactions (DTI), adverse drug reactions (ADR), drug-drug interactions (DDI), drug mechanisms, pharmacogenomics, drug repurposing, and more.
+<p align="center">
+  面向药物知识检索、推理与证据综合的多智能体系统
+</p>
 
-### Key Features
+<p align="center">
+  <img alt="Domain" src="https://img.shields.io/badge/Domain-Drug%20Intelligence-1f6feb">
+  <img alt="Resources" src="https://img.shields.io/badge/Resources-68%20Curated-0a7f5a">
+  <img alt="Skills" src="https://img.shields.io/badge/Implemented%20Skills-25-f59e0b">
+  <img alt="Modes" src="https://img.shields.io/badge/Modes-GRAPH%20%7C%20SIMPLE%20%7C%20WEB__ONLY-7c3aed">
+</p>
 
-- **Vibe-Coding Retrieval**: Each skill has its own standalone example code (`example.py`) and description (`SKILL.md`). The Code Agent reads these and writes custom query code per skill — no rigid schema required.
-- **25 Implemented Skills**: Fully working skills with example code, covering REST API, CLI, LOCAL_FILE, and DATASET access modes.
-- **43 Stub Skills**: Interface preserved for future development; not registered in the default registry.
-- **Code Agent**: LLM writes and executes Python code to query each skill in its natural API style.
-- **Graph Build Agent**: LLM-driven triple extraction from retrieval results (replaces rigid subgraph assembly).
-- **15-Subcategory Skill Tree**: LLM-navigable tree with `✓`/`○` availability markers.
-- **Three Thinking Modes**: GRAPH (iterative multi-agent), SIMPLE (one-shot), WEB_ONLY (live search).
+DrugClaw is a drug-centered agentic RAG system built for questions that generic assistants handle poorly: drug-target interactions, adverse events, drug-drug interactions, mechanism-of-action, pharmacogenomics, repurposing, labeling, and evidence synthesis across heterogeneous biomedical sources.
 
-## Architecture
+DrugClaw 是一个面向药物领域的 Agentic RAG 系统，专门处理通用助手经常答不深、答不稳的问题，例如药物靶点、药物不良反应、药物相互作用、作用机制、药物基因组学、药物重定位，以及跨异构生物医学资源的证据综合。
 
-```
-┌─────────────────────────────────────────┐
-│            Drug Query / Question        │
-└──────────────────┬──────────────────────┘
-                   │
-                   ▼
-┌─────────────────────────────────────────┐
-│           Retriever Agent               │
-│  - Navigates 15-subcategory Skill Tree  │
-│  - Selects relevant drug resources      │
-│  - Extracts key entities                │
-└──────────────────┬──────────────────────┘
-                   │
-                   ▼
-┌─────────────────────────────────────────┐
-│           Code Agent (NEW)              │
-│  - Reads skill's example.py + SKILL.md │
-│  - Writes custom Python query code     │
-│  - Executes and captures results       │
-└──────────────────┬──────────────────────┘
-                   │
-          ┌────────┴────────┐
-          ▼                 ▼
-   ┌────────────┐   ┌────────────────┐
-   │ SIMPLE mode│   │  GRAPH mode    │
-   │ Direct to  │   │ Graph Builder  │
-   │ Responder  │   │ → Reranker     │
-   └─────┬──────┘   │ → Responder    │
-         │          │ → Reflector    │
-         │          └───────┬────────┘
-         │                  │
-         ▼                  ▼
-   ┌──────────────────────────────┐
-   │        Final Answer          │
-   │   (drug-centric with sources)│
-   └──────────────────────────────┘
-```
+## Why DrugClaw / 为什么是 DrugClaw
 
-## Implemented Skills (25)
+Most biomedical QA systems stop at "retrieve a few documents and summarize them." DrugClaw goes further:
 
-| Category | Skill | Access Mode | Description |
-|---|---|---|---|
-| **DTI** | ChEMBL | CLI | Bioactivity data (IC50/Ki/EC50) |
-| | BindingDB | REST_API | Binding affinity data |
-| | DGIdb | REST_API | Drug–gene interactions |
-| | Open Targets | REST_API | Drug-target evidence scores |
-| | TTD | LOCAL_FILE | Therapeutic target database |
-| | STITCH | REST_API | Chemical–protein interactions |
-| **ADR** | FAERS | REST_API | FDA adverse event reports |
-| | SIDER | LOCAL_FILE | Drug side effects from labels |
-| **Knowledgebase** | UniD3 | LOCAL_FILE | Drug discovery KG (GraphML) |
-| | DrugBank | REST_API | Comprehensive drug reference |
-| | IUPHAR | REST_API | Pharmacology reference |
-| | DrugCentral | REST_API | FDA-approved drug info |
-| | CPIC | REST_API | Clinical pharmacogenomics |
-| **Mechanism** | DRUGMECHDB | REST_API | Mechanism-of-action paths |
-| **Labeling** | openFDA | REST_API | FDA drug label search |
-| | DailyMed | REST_API | NIH drug labeling |
-| | MedlinePlus | REST_API | Patient drug information |
-| **Ontology** | RxNorm | REST_API | Drug name normalization |
-| | ChEBI | CLI | Chemical entity ontology |
-| **Repurposing** | RepoDB | DATASET | Drug repositioning outcomes |
-| **PGx** | PharmGKB | REST_API | Pharmacogenomics knowledge |
-| **DDI** | MecDDI | LOCAL_FILE | Mechanistic DDI database |
-| | DDInter | REST_API | DDI with clinical evidence |
-| | KEGG Drug | CLI | Drug interactions with pathway context |
-| **Review** | WebMD Reviews | DATASET | Patient drug reviews |
+大多数生物医学问答系统停留在“检索几段文本然后总结”的层面，DrugClaw 更进一步：
 
-Plus **WebSearch** (DuckDuckGo + PubMed, always-on).
+- It organizes **68 curated drug resources** into a navigable **15-subcategory skill tree**.
+- It uses a **Code Agent** to write resource-specific query code instead of forcing every source into one rigid schema.
+- It supports **structured graph reasoning** for multi-hop drug evidence synthesis.
+- It keeps **web search** as a live fallback for recent literature and broad external evidence.
+- It is built for **drug-native tasks**, not generic retrieval with a biomedical prompt wrapper.
 
-## Skill Directory Structure
+- 将 **68 个药物资源**组织为可导航的 **15 类技能树**。
+- 用 **Code Agent** 为每个资源现写查询代码，而不是强行套进单一死板接口。
+- 支持 **图结构推理**，适合多跳药物证据综合。
+- 保留 **Web Search** 作为最新文献和外部证据的补充通道。
+- 从设计上就是为 **药物原生任务** 服务，而不是“通用 RAG + 生物医学提示词”。
 
-Each implemented skill has its own self-contained directory:
+## Highlights / 核心亮点
 
-```
-skills/dti/chembl/
-├── __init__.py
-├── chembl_skill.py      # RAGSkill class (metadata + retrieve)
-├── example.py           # Standalone query code (for Code Agent)
-├── SKILL.md             # Skill description (for Code Agent)
-└── README.md            # Developer notes
-```
+### 1. Vibe-Coding Retrieval
 
-The **Code Agent** reads `SKILL.md` and `example.py` to understand how to query the skill, then writes custom Python code for the specific entities being queried.
+Each skill ships with its own `SKILL.md` and `example.py`. The Code Agent reads both, understands the native access pattern, generates custom Python query code, executes it, and captures the output.
 
-## 15 Drug Subcategories
+每个 skill 都带有自己的 `SKILL.md` 和 `example.py`。Code Agent 会读取这两份材料，理解资源原生调用方式，自动生成针对当前问题的查询代码并执行。
 
-| Key | Description | Implemented / Total |
-|---|---|---|
-| `dti` | Drug-Target Interaction | 6 / 10 |
-| `adr` | Adverse Drug Reactions | 2 / 5 |
-| `drug_knowledgebase` | Drug Encyclopedias & KGs | 5 / 9 |
-| `drug_mechanism` | Mechanism of Action | 1 / 1 |
-| `drug_labeling` | FDA Labels & Prescribing Info | 3 / 4 |
-| `drug_ontology` | Drug Classification & Ontology | 2 / 4 |
-| `drug_repurposing` | Drug Repurposing KGs | 1 / 9 |
-| `pharmacogenomics` | PGx Variants & Drug Response | 1 / 1 |
-| `ddi` | Drug-Drug Interactions | 3 / 3 |
-| `drug_toxicity` | Drug Toxicity & DILI | 0 / 4 |
-| `drug_combination` | Drug Combination Synergy | 0 / 4 |
-| `drug_molecular_property` | Molecular Properties | 0 / 1 |
-| `drug_disease` | Drug-Disease Associations | 0 / 1 |
-| `drug_review` | Patient Drug Reviews | 1 / 3 |
-| `drug_nlp` | Drug NLP Datasets | 0 / 9 |
+### 2. Drug-Native Skill Coverage
 
-## File Structure
+DrugClaw currently exposes **25 implemented skills** across:
 
-```
-DrugClaw_V1.0/
-├── drugclaw/
-│   ├── config.py                # System configuration
-│   ├── models.py                # Data models (AgentState, ThinkingMode, etc.)
-│   ├── llm_client.py            # LLM API wrapper
-│   ├── main_system.py           # LangGraph orchestration
-│   ├── agent_retriever.py       # Retriever agent (skill selection)
-│   ├── agent_coder.py           # Code agent (writes query code)
-│   ├── agent_graph_builder.py   # Graph builder agent (triple extraction)
-│   ├── agent_reranker.py        # Re-ranker agent
-│   ├── agent_responder.py       # Responder agent
-│   ├── agent_reflector.py       # Reflector agent
-│   ├── agent_websearch.py       # Web search agent
-│   ├── query_logger.py          # Query session logging
-│   └── skills -> ../skills      # Symlink to skills package
-├── skills/
-│   ├── base.py                  # RAGSkill, CLISkillMixin, AccessMode
-│   ├── registry.py              # SkillRegistry
-│   ├── skill_tree.py            # 15-subcategory Skill Tree
-│   ├── dti/                     # Drug-target interaction skills
-│   ├── adr/                     # Adverse drug reaction skills
-│   ├── drug_knowledgebase/      # Drug encyclopedia skills
-│   ├── drug_mechanism/          # Drug mechanism skills
-│   ├── drug_labeling/           # Drug labeling skills
-│   ├── drug_ontology/           # Drug ontology skills
-│   ├── drug_repurposing/        # Drug repurposing skills
-│   ├── pharmacogenomics/        # Pharmacogenomics skills
-│   ├── ddi/                     # Drug-drug interaction skills
-│   ├── drug_toxicity/           # Drug toxicity skills (stubs)
-│   ├── drug_combination/        # Drug combination skills (stubs)
-│   ├── drug_molecular_property/ # (stub)
-│   ├── drug_disease/            # (stub)
-│   ├── drug_review/             # Drug review skills
-│   ├── drug_nlp/                # Drug NLP skills (stubs)
-│   └── web_search/              # WebSearch skill
-├── skillexamples/               # Original standalone skill examples
-├── resources_metadata/          # Local data files
-├── example_usage.py             # Usage examples
-└── README.md
+- Drug-target interaction
+- Adverse drug reaction
+- Drug knowledgebase
+- Drug mechanism
+- Drug labeling
+- Drug ontology
+- Drug repurposing
+- Pharmacogenomics
+- Drug-drug interaction
+- Drug review
+
+DrugClaw 当前已落地 **25 个可用 skill**，覆盖：
+
+- 药物靶点与活性
+- 不良反应与药物警戒
+- 药物知识库
+- 药物机制
+- 药品标签与说明书
+- 药物本体与标准化
+- 药物重定位
+- 药物基因组学
+- 药物相互作用
+- 患者评价
+
+### 3. Three Thinking Modes
+
+- `GRAPH`: retrieve -> build graph -> rerank -> respond -> reflect
+- `SIMPLE`: retrieve -> answer directly
+- `WEB_ONLY`: use live web and literature search only
+
+- `GRAPH`：检索 -> 建图 -> 重排 -> 作答 -> 反思
+- `SIMPLE`：检索后直接作答
+- `WEB_ONLY`：只走在线检索和文献搜索
+
+### 4. Built for Evidence Synthesis
+
+DrugClaw is designed to answer queries like:
+
+- "What are the known targets, adverse effects, and interaction risks of imatinib?"
+- "Which approved drugs may be repurposed for triple-negative breast cancer?"
+- "What pharmacogenomic guidance exists for clopidogrel and CYP2C19?"
+- "Are there clinically meaningful interactions between warfarin and NSAIDs?"
+
+DrugClaw 适合回答的问题包括：
+
+- “伊马替尼已知的靶点、不良反应和相互作用风险有哪些？”
+- “哪些已批准药物可能重定位到三阴性乳腺癌？”
+- “氯吡格雷与 CYP2C19 有哪些药物基因组学建议？”
+- “华法林与 NSAIDs 之间是否存在临床上重要的相互作用？”
+
+## Architecture / 架构
+
+```text
+Drug Query
+   |
+   v
+Retriever Agent
+   |- navigates the 15-subcategory skill tree
+   |- extracts key entities
+   |- selects relevant skills
+   |
+   v
+Code Agent
+   |- reads SKILL.md + example.py
+   |- writes custom Python query code
+   |- executes resource-specific retrieval
+   |
+   +--> SIMPLE mode --> Responder --> Final Answer
+   |
+   +--> GRAPH mode
+         -> Graph Builder
+         -> Reranker
+         -> Responder
+         -> Reflector
+         -> optional Web Search
+         -> Final Answer
 ```
 
-## Installation
+```text
+用户问题
+   |
+   v
+Retriever Agent
+   |- 浏览 15 类技能树
+   |- 抽取关键实体
+   |- 选择合适资源
+   |
+   v
+Code Agent
+   |- 读取 SKILL.md + example.py
+   |- 生成定制查询代码
+   |- 执行资源特定检索
+   |
+   +--> SIMPLE 模式 --> Responder --> 最终回答
+   |
+   +--> GRAPH 模式
+         -> Graph Builder
+         -> Reranker
+         -> Responder
+         -> Reflector
+         -> 可选 Web Search
+         -> 最终回答
+```
+
+## Implemented Skills / 已实现技能
+
+| Category | Skills |
+| --- | --- |
+| DTI | ChEMBL, BindingDB, DGIdb, Open Targets Platform, TTD, STITCH |
+| ADR | FAERS, SIDER |
+| Knowledgebase | UniD3, DrugBank, IUPHAR/BPS Guide to Pharmacology, DrugCentral, CPIC |
+| Mechanism | DRUGMECHDB |
+| Labeling | openFDA Human Drug, DailyMed, MedlinePlus Drug Info |
+| Ontology | RxNorm, ChEBI |
+| Repurposing | RepoDB |
+| Pharmacogenomics | PharmGKB |
+| DDI | MecDDI, DDInter, KEGG Drug |
+| Review | WebMD Drug Reviews |
+
+Plus `WebSearch` for DuckDuckGo + PubMed style external retrieval.
+
+另有 `WebSearch` 用于 DuckDuckGo + PubMed 风格的外部检索补充。
+
+## Quick Start / 快速开始
+
+### 1. Install / 安装
 
 ```bash
 pip install langgraph openai
 
-# Optional CLI packages (enable CLI-first access for 3 skills)
-pip install chembl_webresource_client  # ChEMBL
-pip install libchebipy                 # ChEBI
-pip install bioservices                # KEGG Drug
+# Optional CLI dependencies for selected skills
+pip install chembl_webresource_client
+pip install libchebipy
+pip install bioservices
 ```
 
-## Configuration
+### 2. Prepare API keys / 准备 API Key
 
-Create an API key file:
+Create `navigator_api_keys.json`:
+
+创建 `navigator_api_keys.json`：
 
 ```json
 {
   "OPENAI_API_KEY": "your-api-key-here",
-  "base_url": "https://your-navigator-endpoint.com/v1"
+  "base_url": "https://your-endpoint.com/v1"
 }
 ```
 
-Update `drugclaw/config.py` to point to your key file. For `LOCAL_FILE` skills (TTD, SIDER, MecDDI, etc.), configure the data paths in `SKILL_CONFIGS`.
+Important:
 
-Local data files should be placed under `resources_metadata/` following the subcategory structure:
-```
-resources_metadata/
-├── drug_knowledgebase/UniD3/       # GraphML files
-├── drug_knowledgebase/DrugBank/    # XML + CSV
-├── drug_repurposing/RepoDB/        # full.csv
-├── adr/SIDER/                      # meddra_all_se.tsv
-├── dti/TTD/                        # TTD flat files
-├── ddi/MecDDI/                     # MecDDI CSV
-└── ...
-```
+- The current default path in `drugclaw/config.py` points to the original author's environment.
+- In your own environment, pass the local key file explicitly.
 
-## Usage
+注意：
 
-### Basic Example
+- 当前 `drugclaw/config.py` 里的默认 key 路径指向作者原始环境。
+- 在你自己的环境里，建议显式传入本地 key 文件路径。
+
+### 3. Run a query / 运行查询
 
 ```python
 from drugclaw.config import Config
 from drugclaw.main_system import DrugClawSystem
+from drugclaw.models import ThinkingMode
 
-config = Config()
+config = Config(key_file="navigator_api_keys.json")
 system = DrugClawSystem(config)
 
-result = system.query("What are the known drug targets and adverse effects of imatinib?")
-print(result['answer'])
+result = system.query(
+    "What are the known drug targets and adverse effects of imatinib?",
+    thinking_mode=ThinkingMode.GRAPH,
+)
+
+print(result["answer"])
 ```
 
-### Three Thinking Modes
+### 4. Try different modes / 尝试不同模式
 
 ```python
 from drugclaw.models import ThinkingMode
 
-# GRAPH mode — full multi-agent reasoning (default)
-result = system.query("...", thinking_mode=ThinkingMode.GRAPH)
-
-# SIMPLE mode — one-shot retrieval + direct synthesis
-result = system.query("...", thinking_mode=ThinkingMode.SIMPLE)
-
-# WEB_ONLY mode — DuckDuckGo + PubMed only
-result = system.query("...", thinking_mode=ThinkingMode.WEB_ONLY)
+system.query("...", thinking_mode=ThinkingMode.GRAPH)
+system.query("...", thinking_mode=ThinkingMode.SIMPLE)
+system.query("...", thinking_mode=ThinkingMode.WEB_ONLY)
 ```
 
-### With Resource Filter
+### 5. Pin specific skills / 指定资源检索
 
 ```python
-# Only query specific skills (bypasses LLM skill selection)
 result = system.query(
     "What are the adverse effects of aspirin?",
     resource_filter=["FAERS", "SIDER"],
 )
 ```
 
-### Programmatic Skill Access
+## Repository Layout / 仓库结构
 
-```python
-from skills import build_default_registry
+```text
+drugclaw/
+  config.py
+  main_system.py
+  llm_client.py
+  agent_retriever.py
+  agent_coder.py
+  agent_graph_builder.py
+  agent_reranker.py
+  agent_responder.py
+  agent_reflector.py
+  agent_websearch.py
 
-class DummyConfig:
-    SKILL_CONFIGS = {}
-    KG_ENDPOINTS = {}
+skills/
+  <subcategory>/<skill_name>/
+    *_skill.py
+    example.py
+    SKILL.md
+    README.md
 
-registry = build_default_registry(DummyConfig())
-
-# List all available skills
-print(registry.get_all_skill_summaries())
-
-# Get skill info for Code Agent
-info = registry.get_skill_info_for_coder("ChEMBL")
-
-# Query specific skills
-results = registry.query(
-    skill_names=['ChEMBL', 'DGIdb'],
-    entities={'drug': ['imatinib']},
-    query='imatinib drug targets',
-)
+resources_metadata/
+  local data for dataset and file-based skills
 ```
 
-## Adding a New Skill
+## What Makes It Different / 差异化优势
 
-1. Create the skill directory under the appropriate subcategory:
-```
-skills/<subcategory>/<name>/
-├── __init__.py
-├── <name>_skill.py     # RAGSkill class
-├── example.py           # Standalone query code
-└── SKILL.md             # Skill description for Code Agent
-```
+### Resource-native querying instead of forced abstraction
 
-2. Implement the RAGSkill class with `_implemented = True`:
-```python
-from ...base import RAGSkill, AccessMode, RetrievalResult
+DrugClaw does not require every biomedical source to behave like the same database.
 
-class MyDrugDBSkill(RAGSkill):
-    name = "MyDrugDB"
-    subcategory = "dti"
-    resource_type = "Database"
-    access_mode = AccessMode.REST_API
-    aim = "My drug-target database"
-    data_range = "Drug-target pairs from MyDrugDB"
-    _implemented = True
+DrugClaw 不要求每个生物医学资源都伪装成同一种数据库接口。
 
-    def retrieve(self, entities, query="", max_results=50, **kwargs):
-        # Your retrieval logic
-        ...
-```
+### Agentic graph reasoning instead of flat summarization
 
-3. Write `example.py` — a self-contained script showing how to query the resource.
+DrugClaw can transform free-form retrieval output into triples, subgraphs, ranked paths, and evidence-aware answers.
 
-4. Write `SKILL.md` — description of the API, functions, and usage patterns.
+DrugClaw 可以把自由文本检索结果进一步转成三元组、子图、路径排序和基于证据的回答，而不只是平铺式总结。
 
-5. Register in `skills/__init__.py` → `build_default_registry()`.
+### Drug-specialized scope instead of generic biomedical branding
 
-## License
+This system is opinionated around drug tasks: DTI, ADR, DDI, labeling, repurposing, PGx, and mechanism reasoning.
+
+这个系统不是泛泛的“生物医学助手”，而是明确围绕药物任务构建：DTI、ADR、DDI、标签、重定位、PGx 与机制推理。
+
+## Current Notes / 当前说明
+
+- The repository already imports correctly from the workspace root.
+- Packaging metadata in `pyproject.toml` is not yet fully aligned with the current directory layout.
+- Some skills require local files under `resources_metadata/`.
+- Some default config paths still reflect the original development machine.
+
+- 当前仓库在项目根目录下可直接导入运行。
+- `pyproject.toml` 的打包配置与当前目录结构还没有完全对齐。
+- 部分 skill 依赖 `resources_metadata/` 下的本地数据文件。
+- 部分默认配置路径仍然保留作者开发机路径。
+
+## Citation / 引用
+
+If you use DrugClaw in research or product work, please cite the repository and the original upstream data resources used by the selected skills.
+
+如果你在科研或产品中使用 DrugClaw，请同时引用本仓库以及对应 skill 所使用的原始上游数据资源。
+
+## License / 许可证
 
 MIT License
