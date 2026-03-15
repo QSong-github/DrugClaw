@@ -239,46 +239,44 @@ class Config:
         }
 
         # ------------------------------------------------------------------
-        # Default active skills (REST_API + CLI = always-on without local files)
+        # Default active skills — only implemented skills (25 with example.py + SKILL.md)
         # ------------------------------------------------------------------
         self.DEFAULT_ACTIVE_SKILLS = [
-            # REST_API — always on, no key or local file needed
-            "ChEMBL",           # DTI — CLI-first (chembl_webresource_client)
-            "BindingDB",        # DTI
-            "DGIdb",            # DTI
-            "Open Targets Platform",  # DTI
-            "STITCH",           # DTI
-            "nSIDES",           # ADR
-            "ADReCS",           # ADR
-            "IUPHAR/BPS Guide to Pharmacology",  # Drug Knowledgebase
-            "DrugCentral",      # Drug Knowledgebase
-            "FDA Orange Book",  # Drug Knowledgebase
-            "CPIC",             # Drug Knowledgebase
-            "DRUGMECHDB",       # Drug Mechanism (auto-download)
-            "openFDA Human Drug",    # Drug Labeling
-            "DailyMed",         # Drug Labeling
-            "MedlinePlus Drug Info", # Drug Labeling
-            "RxNorm",           # Drug Ontology
-            "ATC/DDD",          # Drug Ontology
-            "NDF-RT",           # Drug Ontology
-            "ChEBI",            # Drug Ontology — CLI-first (libchebipy)
-            "PharmGKB",         # Pharmacogenomics
-            "DDInter",          # DDI
-            "KEGG Drug",        # DDI — CLI-first (bioservices)
-            "LiverTox",         # Drug Toxicity
-            # LOCAL_FILE — enabled when paths are configured
-            "UniD3",            # Drug Knowledgebase
-            "PharmKG",          # Drug Knowledgebase
-            "DRKG",             # Drug Repurposing
-            "RepoDB",           # Drug Repurposing (benchmark dataset)
-            "SIDER",            # ADR
-            "FAERS",            # ADR (benchmark dataset)
-            "TTD",              # DTI
-            "TarKG",            # DTI
-            "DTC",              # DTI
-            "GDKD",             # DTI
-            "MecDDI",           # DDI
-            "DrugBank",         # Drug Knowledgebase (API key optional)
+            # DTI (6 implemented)
+            "ChEMBL",           # CLI-first (chembl_webresource_client)
+            "BindingDB",        # REST API
+            "DGIdb",            # REST API / GraphQL
+            "Open Targets Platform",  # REST API / GraphQL
+            "TTD",              # LOCAL_FILE
+            "STITCH",           # REST API
+            # ADR (2 implemented)
+            "FAERS",            # DATASET
+            "SIDER",            # LOCAL_FILE
+            # Drug Knowledgebase (5 implemented)
+            "UniD3",            # LOCAL_FILE (GraphML)
+            "DrugBank",         # REST API (API key optional)
+            "IUPHAR/BPS Guide to Pharmacology",  # REST API
+            "DrugCentral",      # REST API
+            "CPIC",             # REST API
+            # Drug Mechanism (1 implemented)
+            "DRUGMECHDB",       # REST API (auto-download)
+            # Drug Labeling (3 implemented)
+            "openFDA Human Drug",    # REST API
+            "DailyMed",         # REST API
+            "MedlinePlus Drug Info", # REST API
+            # Drug Ontology (2 implemented)
+            "RxNorm",           # REST API
+            "ChEBI",            # CLI-first (libchebipy)
+            # Drug Repurposing (1 implemented)
+            "RepoDB",           # DATASET
+            # Pharmacogenomics (1 implemented)
+            "PharmGKB",         # REST API
+            # DDI (3 implemented)
+            "MecDDI",           # LOCAL_FILE
+            "DDInter",          # REST API
+            "KEGG Drug",        # CLI-first (bioservices)
+            # Drug Review (1 implemented)
+            "WebMD Drug Reviews",   # DATASET
         ]
 
     def get_llm_config(self) -> Dict[str, Any]:

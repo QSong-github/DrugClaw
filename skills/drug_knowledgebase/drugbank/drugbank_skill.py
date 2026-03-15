@@ -43,6 +43,7 @@ class DrugBankSkill(RAGSkill):
     access_mode = AccessMode.REST_API
     aim = "Comprehensive drug reference"
     data_range = "Drug structures, pharmacology, targets, interactions"
+    _implemented = True
 
     def __init__(self, config: Optional[Dict[str, Any]] = None) -> None:
         super().__init__(config)

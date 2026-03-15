@@ -32,6 +32,7 @@ class RxNormSkill(RAGSkill):
     access_mode = AccessMode.REST_API
     aim = "Drug name normalization"
     data_range = "NLM normalized drug names linking to NDC, RxCUI, and clinical concepts"
+    _implemented = True
 
     def __init__(self, config: Optional[Dict[str, Any]] = None) -> None:
         super().__init__(config)

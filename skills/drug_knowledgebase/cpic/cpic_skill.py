@@ -32,6 +32,7 @@ class CPICSkill(RAGSkill):
     access_mode = AccessMode.REST_API
     aim = "Clinical pharmacogenomics"
     data_range = "CPIC guidelines linking genes/variants to drug dosing"
+    _implemented = True
 
     def __init__(self, config: Optional[Dict[str, Any]] = None) -> None:
         super().__init__(config)

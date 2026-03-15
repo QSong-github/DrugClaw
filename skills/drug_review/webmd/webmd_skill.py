@@ -36,6 +36,7 @@ class WebMDReviewsSkill(DatasetRAGSkill):
     access_mode = AccessMode.DATASET
     aim = "Patient drug reviews (WebMD)"
     data_range = "362 000+ patient drug reviews from WebMD"
+    _implemented = True
 
     def __init__(self, config: Optional[Dict[str, Any]] = None) -> None:
         super().__init__(config)
@@ -74,8 +75,7 @@ class WebMDReviewsSkill(DatasetRAGSkill):
             logger.error("WebMD Reviews: load failed — %s", exc)
 
     def is_available(self) -> bool:
-        self._ensure_loaded()
-        return bool(self._rows)
+        return self._implemented
 
     def retrieve(
         self,

@@ -35,6 +35,7 @@ class SIDERSkill(RAGSkill):
     access_mode = AccessMode.LOCAL_FILE
     aim = "Side effect resource"
     data_range = "Drug–side-effect associations from package inserts"
+    _implemented = True
 
     def __init__(self, config: Optional[Dict[str, Any]] = None) -> None:
         super().__init__(config)
@@ -74,8 +75,7 @@ class SIDERSkill(RAGSkill):
             self._name_map[name.lower()] = sid
 
     def is_available(self) -> bool:
-        self._ensure_loaded()
-        return bool(self._stitch_to_se)
+        return self._implemented
 
     def retrieve(
         self,

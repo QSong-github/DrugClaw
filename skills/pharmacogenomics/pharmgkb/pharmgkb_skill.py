@@ -32,6 +32,7 @@ class PharmGKBSkill(RAGSkill):
     access_mode = AccessMode.REST_API
     aim = "Pharmacogenomics knowledge base"
     data_range = "Curated PGx knowledge: variant-drug-outcome annotations"
+    _implemented = True
 
     def __init__(self, config: Optional[Dict[str, Any]] = None) -> None:
         super().__init__(config)

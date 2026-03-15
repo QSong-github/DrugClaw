@@ -31,6 +31,7 @@ class IUPHARSkill(RAGSkill):
     access_mode = AccessMode.REST_API
     aim = "Pharmacology reference"
     data_range = "Expert-curated targets, drugs, and pharmacological data"
+    _implemented = True
 
     def __init__(self, config: Optional[Dict[str, Any]] = None) -> None:
         super().__init__(config)

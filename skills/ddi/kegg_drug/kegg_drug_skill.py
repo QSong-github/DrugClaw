@@ -42,6 +42,7 @@ class KEGGDrugSkill(CLISkillMixin, RAGSkill):
     access_mode = AccessMode.CLI
     aim = "KEGG drug interactions"
     data_range = "Drug-drug interactions from KEGG with pathway context"
+    _implemented = True
     cli_package_name = "bioservices"
 
     def __init__(self, config: Optional[Dict[str, Any]] = None) -> None:

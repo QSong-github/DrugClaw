@@ -46,6 +46,7 @@ class ChEBISkill(CLISkillMixin, RAGSkill):
     access_mode = AccessMode.CLI
     aim = "Chemical entity ontology"
     data_range = "Ontology of chemical entities with biological roles"
+    _implemented = True
     cli_package_name = "libchebipy"
 
     def __init__(self, config: Optional[Dict[str, Any]] = None) -> None:
