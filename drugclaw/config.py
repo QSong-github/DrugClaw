@@ -3,14 +3,25 @@ Configuration file for DrugClaw — Drug-Specialized Agentic RAG System
 """
 import json
 import os
+from pathlib import Path
 from typing import Dict, Any
 
 class Config:
     """System configuration and constants"""
 
-    def __init__(self, key_file: str = '/blue/qsong1/wang.qing/AgentLLM/DrugClaw/navigator_api_keys.json'):
+    def __init__(self, key_file: str | None = None):
         """Initialize configuration from JSON key file"""
-        with open(key_file, 'r') as file:
+        repo_root = Path(__file__).resolve().parent.parent
+        default_key_file = (
+            os.environ.get("DRUGCLAW_KEY_FILE")
+            or str(repo_root / "navigator_api_keys.json")
+        )
+        key_path = Path(key_file or default_key_file).expanduser()
+
+        if not key_path.is_absolute():
+            key_path = (Path.cwd() / key_path).resolve()
+
+        with open(key_path, 'r') as file:
             data = json.load(file)
 
         self.OPENAI_API_KEY = data.get('OPENAI_API_KEY')
@@ -18,7 +29,7 @@ class Config:
         os.environ['TOOLKIT_API_KEY'] = self.OPENAI_API_KEY
 
         # Model settings
-        self.MODEL_NAME = "claude-4.5-sonnet"
+        self.MODEL_NAME = "gpt-oss-120b"
         self.TEMPERATURE = 0.7
         self.MAX_TOKENS = 2000
 
@@ -95,12 +106,12 @@ class Config:
             # ── Drug Knowledgebase ─────────────────────────────────────
             # UniD3: local GraphML files (paths from KG_ENDPOINTS['unid3'])
             "UniD3": {
-                'UniD3_Level1_DDM': '/blue/qsong1/wang.qing/AgentLLM/DrugClaw/resources_metadata/drug_knowledgebase/UniD3/UniD3_L1T1.graphml',
-                'UniD3_Level1_DEA': '/blue/qsong1/wang.qing/AgentLLM/DrugClaw/resources_metadata/drug_knowledgebase/UniD3/UniD3_L1T2.graphml',
-                'UniD3_Level1_DTA': '/blue/qsong1/wang.qing/AgentLLM/DrugClaw/resources_metadata/drug_knowledgebase/UniD3/UniD3_L1T3.graphml',
-                'UniD3_Level2_DDM': '/blue/qsong1/wang.qing/AgentLLM/DrugClaw/resources_metadata/drug_knowledgebase/UniD3/UniD3_L2T1.graphml',
-                'UniD3_Level2_DEA': '/blue/qsong1/wang.qing/AgentLLM/DrugClaw/resources_metadata/drug_knowledgebase/UniD3/UniD3_L2T2.graphml',
-                'UniD3_Level2_DTA': '/blue/qsong1/wang.qing/AgentLLM/DrugClaw/resources_metadata/drug_knowledgebase/UniD3/UniD3_L2T3.graphml',
+                'UniD3_Level1_DDM': str(repo_root / 'resources_metadata/drug_knowledgebase/UniD3/UniD3_L1T1.graphml'),
+                'UniD3_Level1_DEA': str(repo_root / 'resources_metadata/drug_knowledgebase/UniD3/UniD3_L1T2.graphml'),
+                'UniD3_Level1_DTA': str(repo_root / 'resources_metadata/drug_knowledgebase/UniD3/UniD3_L1T3.graphml'),
+                'UniD3_Level2_DDM': str(repo_root / 'resources_metadata/drug_knowledgebase/UniD3/UniD3_L2T1.graphml'),
+                'UniD3_Level2_DEA': str(repo_root / 'resources_metadata/drug_knowledgebase/UniD3/UniD3_L2T2.graphml'),
+                'UniD3_Level2_DTA': str(repo_root / 'resources_metadata/drug_knowledgebase/UniD3/UniD3_L2T3.graphml'),
             },
             # DrugBank: register at go.drugbank.com for full API
             "DrugBank": {
@@ -154,7 +165,7 @@ class Config:
 
             # ── Drug Repurposing ───────────────────────────────────────
             "RepoDB": {
-                "csv_path": "/blue/qsong1/wang.qing/AgentLLM/DrugClaw/resources_metadata/drug_repurposing/RepoDB/full.csv",          # e.g. "/data/repodb/repodb.csv"
+                "csv_path": str(repo_root / "resources_metadata/drug_repurposing/RepoDB/full.csv"),
                 "include_failed": False,
             },
             "DRKG": {

@@ -7,10 +7,13 @@ name = "drugclaw"
 version = "0.1.0"
 description = "Agentic system with Synaptic Navigation for Evidence-based Drug Reasoning"
 authors = [{name = "Qing Wang"}]
-dependencies = []
+dependencies = ["langgraph", "openai"]
+
+[project.scripts]
+drugclaw = "drugclaw.cli:main"
 
 [tool.setuptools]
-package-dir = {"" = "src"}
+package-dir = {"" = "."}
 
 [tool.setuptools.packages.find]
-where = ["src"]
+where = ["."]

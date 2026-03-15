@@ -65,25 +65,50 @@ pip install bioservices
 - 环境变量 `DRUGCLAW_KEY_FILE`
 - 仓库根目录下的 `navigator_api_keys.json`
 
-### 3. 直接运行最小体验脚本
+### 3. 直接运行官方 CLI Demo
 
-这是当前仓库最稳的体验入口。它会固定使用：
+这是当前最推荐的体验入口。无需安装也可以直接用模块方式运行：
+
+```bash
+python -m drugclaw demo
+```
+
+默认会固定使用：
 
 - `SIMPLE` 模式
-- `SIDER` + `FAERS`
-- 默认 ADR 查询
+- 在线标签类资源
+- 默认 metformin 说明书与安全信息查询
+
+你也可以手动运行自定义问题：
+
+```bash
+python -m drugclaw run --query "What are the known drug targets of imatinib?"
+```
+
+### 4. 安装后直接使用 `drugclaw` 命令
+
+```bash
+pip install -e . --no-build-isolation
+drugclaw demo
+drugclaw run --query "What are the known drug targets of imatinib?"
+```
+
+### 5. 兼容快捷方式：`run_minimal.py`
+
+这个脚本现在等价于一个 demo 快捷入口：
 
 ```bash
 python run_minimal.py
 ```
 
-也可以自己传入问题：
+也可以把参数原样透传给 CLI：
 
 ```bash
-python run_minimal.py --query "What are the known adverse drug reactions of aspirin?"
+python run_minimal.py demo --preset label
+python run_minimal.py run --query "What prescribing and safety information is available for metformin?"
 ```
 
-### 4. 如果你想自己写调用代码
+### 6. 如果你想自己写调用代码
 
 ```python
 from drugclaw.config import Config
@@ -94,15 +119,15 @@ config = Config(key_file="navigator_api_keys.json")
 system = DrugClawSystem(config)
 
 result = system.query(
-    "What are the known adverse drug reactions of aspirin?",
+    "What prescribing and safety information is available for metformin?",
     thinking_mode=ThinkingMode.SIMPLE,
-    resource_filter=["SIDER", "FAERS"],
+    resource_filter=["DailyMed", "openFDA Human Drug", "MedlinePlus Drug Info"],
 )
 
 print(result["answer"])
 ```
 
-### 5. 三种思考模式
+### 7. 三种思考模式
 
 ```python
 from drugclaw.models import ThinkingMode
