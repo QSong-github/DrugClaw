@@ -32,6 +32,7 @@ class DDInterSkill(RAGSkill):
     access_mode = AccessMode.REST_API
     aim = "DDI interaction database"
     data_range = "Comprehensive DDI database with clinical evidence"
+    _implemented = True
 
     def __init__(self, config: Optional[Dict[str, Any]] = None) -> None:
         super().__init__(config)

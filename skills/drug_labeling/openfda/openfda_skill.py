@@ -39,6 +39,7 @@ class OpenFDASkill(RAGSkill):
     access_mode = AccessMode.REST_API
     aim = "FDA drug label search"
     data_range = "Structured FDA drug labels (adverse events, dosing, warnings)"
+    _implemented = True
 
     def __init__(self, config: Optional[Dict[str, Any]] = None) -> None:
         super().__init__(config)

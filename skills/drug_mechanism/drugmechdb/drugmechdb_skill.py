@@ -40,6 +40,7 @@ class DrugMechDBSkill(RAGSkill):
     access_mode = AccessMode.REST_API
     aim = "Drug mechanism-of-action paths"
     data_range = "Curated MoA paths linking drugs to diseases via biological graphs"
+    _implemented = True
 
     def __init__(self, config: Optional[Dict[str, Any]] = None) -> None:
         super().__init__(config)
@@ -91,8 +92,7 @@ class DrugMechDBSkill(RAGSkill):
                 self._drug_index[key].append(idx)
 
     def is_available(self) -> bool:
-        self._ensure_loaded()
-        return bool(self._paths)
+        return self._implemented
 
     def retrieve(
         self,

@@ -32,6 +32,7 @@ class DrugCentralSkill(RAGSkill):
     access_mode = AccessMode.REST_API
     aim = "Drug information resource"
     data_range = "FDA-approved drug information, indications, targets"
+    _implemented = True
 
     def __init__(self, config: Optional[Dict[str, Any]] = None) -> None:
         super().__init__(config)

@@ -36,6 +36,7 @@ DATASET    Labelled benchmark dataset (mask during evaluation)
 from __future__ import annotations
 
 import logging
+import os
 import shutil
 import subprocess
 import time
@@ -148,6 +149,7 @@ class RAGSkill(ABC):
     access_mode: str = AccessMode.REST_API
     aim: str = ""
     data_range: str = ""
+    _implemented: bool = False            # True only for skills with working example code
 
     def __init__(self, config: Optional[Dict[str, Any]] = None):
         self.config: Dict[str, Any] = config or {}
@@ -176,8 +178,45 @@ class RAGSkill(ABC):
         """
 
     def is_available(self) -> bool:
-        """Return True if the skill can be used right now."""
-        return True
+        """Return True if the skill can be used right now.
+
+        Only implemented skills (with working example code + SKILL.md) are available.
+        """
+        return self._implemented
+
+    def get_example_path(self) -> Optional[str]:
+        """Return path to the example.py in this skill's directory, or None."""
+        import inspect
+        skill_dir = os.path.dirname(inspect.getfile(type(self)))
+        example_path = os.path.join(skill_dir, "example.py")
+        if os.path.exists(example_path):
+            return example_path
+        return None
+
+    def get_skill_md_path(self) -> Optional[str]:
+        """Return path to the SKILL.md in this skill's directory, or None."""
+        import inspect
+        skill_dir = os.path.dirname(inspect.getfile(type(self)))
+        md_path = os.path.join(skill_dir, "SKILL.md")
+        if os.path.exists(md_path):
+            return md_path
+        return None
+
+    def get_example_code(self) -> str:
+        """Read and return the example.py code for this skill."""
+        path = self.get_example_path()
+        if path:
+            with open(path, "r", encoding="utf-8") as f:
+                return f.read()
+        return f"# No example code available for {self.name}"
+
+    def get_skill_md(self) -> str:
+        """Read and return the SKILL.md description for this skill."""
+        path = self.get_skill_md_path()
+        if path:
+            with open(path, "r", encoding="utf-8") as f:
+                return f.read()
+        return f"No skill description available for {self.name}"
 
     def get_description(self) -> str:
         """Human-readable description used in LLM prompts."""

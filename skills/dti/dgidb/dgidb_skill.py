@@ -87,6 +87,7 @@ class DGIdbSkill(RAGSkill):
     access_mode = AccessMode.REST_API
     aim = "Drug–gene interactions"
     data_range = "Curated drug–gene interaction database (NCI, ClinVar, etc.)"
+    _implemented = True
 
     def __init__(self, config: Optional[Dict[str, Any]] = None) -> None:
         super().__init__(config)

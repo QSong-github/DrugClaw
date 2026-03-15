@@ -47,6 +47,7 @@ class ChEMBLSkill(CLISkillMixin, RAGSkill):
     access_mode = AccessMode.CLI
     aim = "Bioactivity reasoning"
     data_range = "Drug–target IC50/Ki/EC50 across 14 000+ targets"
+    _implemented = True
     cli_package_name = "chembl_webresource_client"
 
     def __init__(self, config: Optional[Dict[str, Any]] = None) -> None:

@@ -38,6 +38,7 @@ class TTDSkill(RAGSkill):
     access_mode = AccessMode.LOCAL_FILE
     aim = "Therapeutic target database"
     data_range = "Approved/clinical/experimental targets with drug linkages"
+    _implemented = True
 
     def __init__(self, config: Optional[Dict[str, Any]] = None) -> None:
         super().__init__(config)
@@ -81,8 +82,7 @@ class TTDSkill(RAGSkill):
             logger.error("TTD: load failed — %s", exc)
 
     def is_available(self) -> bool:
-        self._ensure_loaded()
-        return bool(self._drug_index)
+        return self._implemented
 
     def retrieve(
         self,

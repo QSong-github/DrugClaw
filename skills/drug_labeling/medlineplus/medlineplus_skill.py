@@ -34,6 +34,7 @@ class MedlinePlusSkill(RAGSkill):
     access_mode = AccessMode.REST_API
     aim = "Patient drug information"
     data_range = "NIH MedlinePlus drug information for patients and clinicians"
+    _implemented = True
 
     def __init__(self, config: Optional[Dict[str, Any]] = None) -> None:
         super().__init__(config)

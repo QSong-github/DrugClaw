@@ -59,6 +59,7 @@ class WebSearchSkill(RAGSkill):
     access_mode = AccessMode.REST_API
     aim = "Free web search"
     data_range = "Real-time web results via DuckDuckGo + PubMed E-utilities"
+    _implemented = True
 
     # ------------------------------------------------------------------ #
     # Availability                                                         #
