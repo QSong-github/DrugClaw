@@ -1,7 +1,7 @@
 # DrugClaw
 
 <p align="center">
-  <img src="./DrugClaw_Logo.png" alt="DrugClaw Logo" width="520" />
+  <img src="./support/DrugClaw_Logo.png" alt="DrugClaw Logo" width="520" />
 </p>
 
 <p align="center">
@@ -217,7 +217,7 @@ system.query("...", thinking_mode=ThinkingMode.WEB_ONLY)
 ## 核心亮点
 
 <p align="center">
-  <img src="./DrugClaw.png" alt="DrugClaw Overview" width="760" />
+  <img src="./support/DrugClaw.png" alt="DrugClaw Overview" width="760" />
 </p>
 
 ### 1. Vibe-Coding 检索

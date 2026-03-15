@@ -63,7 +63,7 @@ def extract_drug_description(html_content: str, max_chars: int = 500) -> dict:
 
 
 if __name__ == "__main__":
-    drugs_to_look_up = ["aspirin", "metformin", "lisinopril"]
+    drugs_to_look_up = ["aspirin", "ibuprofen", "amoxicillin"]
 
     for drug in drugs_to_look_up:
         print(f"\n=== RxList: {drug} ===")

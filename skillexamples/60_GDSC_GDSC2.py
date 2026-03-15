@@ -13,25 +13,22 @@ Access method: Direct download from cancerrxgene.org.
 import urllib.request
 import os
 import csv
-import zipfile
-
 OUTPUT_DIR = "GDSC"
 
 # GDSC2 drug sensitivity data (latest)
 GDSC2_URL = "https://cog.sanger.ac.uk/cancerrxgene/GDSC_data_8.5/GDSC2_fitted_dose_response_27Oct23.xlsx"
 GDSC1_URL = "https://cog.sanger.ac.uk/cancerrxgene/GDSC_data_8.5/GDSC1_fitted_dose_response_27Oct23.xlsx"
-# Drug list
-DRUG_LIST_URL = "https://www.cancerrxgene.org/downloads/drug_data?drug_id=&drug_name=&putative_gene_target=&pathway_name=&export=csv"
+# Official Sanger current release (verified March 2026)
+DRUG_LIST_URL = "https://ftp.sanger.ac.uk/pub/project/cancerrxgene/releases/current_release/screened_compounds_rel_8.4.csv"
 
 
 def download_gdsc_drug_list():
     """Download the GDSC drug information list."""
     os.makedirs(OUTPUT_DIR, exist_ok=True)
-    url = "https://cog.sanger.ac.uk/cancerrxgene/GDSC_data_8.5/screened_compunds_rel_8.5.csv"
     fname = os.path.join(OUTPUT_DIR, "GDSC_drug_list.csv")
     print(f"Downloading GDSC drug list ...")
     try:
-        req = urllib.request.Request(url, headers={"User-Agent": "Mozilla/5.0"})
+        req = urllib.request.Request(DRUG_LIST_URL, headers={"User-Agent": "Mozilla/5.0"})
         with urllib.request.urlopen(req, timeout=30) as resp:
             with open(fname, "wb") as f:
                 f.write(resp.read())
@@ -76,7 +73,7 @@ def preview_drug_list(fpath: str, n: int = 10):
                 break
             name = row.get("DRUG_NAME", row.get("Name", "?"))
             target = row.get("TARGET", row.get("Gene Target", "?"))
-            pathway = row.get("PATHWAY_NAME", row.get("Pathway", "?"))
+            pathway = row.get("TARGET_PATHWAY", row.get("PATHWAY_NAME", row.get("Pathway", "?")))
             print(f"  {name} | Target: {target} | Pathway: {pathway}")
 
 

@@ -1,116 +1,65 @@
-# 67 · CPIC
-
-> Clinical Pharmacogenomics Implementation Consortium — gene-based prescribing guidelines  
-> **Category:** Drug-centric | **Type:** DB | **Subcategory:** Drug Knowledgebase  
-> **API:** `https://api.cpicpgx.org/v1` (PostgREST, free, no key required)
-
-| Resource | URL |
-|----------|-----|
-| Homepage | https://cpicpgx.org/ |
-| API / Data | https://cpicpgx.org/cpic-data/ |
-| Paper | https://pubmed.ncbi.nlm.nih.gov/33479744/ |
-
+---
+name: cpic-query
+description: >
+  Query the CPIC pharmacogenomics API. Use whenever the user asks about
+  gene-based prescribing guidelines, drug-gene pairs, CPIC recommendations,
+  PharmGKB-linked PGx evidence, or wants to query one drug, one gene, or a
+  short list of entities through CPIC.
 ---
 
-## What it provides
+# CPIC Query Skill
 
-- **Drug metadata**: drugid (RxNorm), DrugBank ID, ATC codes, flowchart links
-- **Guidelines**: peer-reviewed pharmacogenomics prescribing guidelines (drug + gene → dosing advice)
-- **Gene-drug pairs**: curated pairs with CPIC level, PharmGKB level, PGx testing status
-- **Dosing recommendations**: phenotype-specific dosing adjustments per drug-gene combination
+Search CPIC by drug name or gene symbol. Drug names are resolved to `drugid`
+first, then routed to the appropriate PostgREST tables.
 
----
+| Input Pattern | Detected As | Action |
+|---|---|---|
+| `clopidogrel` / `warfarin` | drug name | resolve via `/v1/drug`, then query guidelines / pairs / recommendations |
+| `CYP2D6` / `CYP2C19` | gene symbol | query `/v1/pair` by `genesymbol` |
+| `["warfarin", "codeine"]` | list of drugs | iterate `query()` per item |
 
-## API schema note
+## API
 
-The `pair` and `recommendation` tables use **`drugid`** (e.g. `RxNorm:32968`), not drug name.  
-This script resolves drug names automatically via the `/v1/drug` table before querying.
+| Function | Input | Returns |
+|---|---|---|
+| `get_drug_info(drug_name)` | single drug name | `list[dict]` from `/v1/drug` |
+| `get_guidelines(drug_name=None)` | optional drug name | `list[dict]` from `/v1/guideline` |
+| `get_gene_drug_pairs(drug_name=None, gene=None)` | optional drug or gene | `list[dict]` from `/v1/pair` |
+| `get_recommendations(drug_name)` | single drug name | `list[dict]` from `/v1/recommendation` |
+| `query(entities, fields="all")` | `str` or `list[str]` | one result dict per entity |
 
-Guideline lookup uses two strategies: (1) name substring match, (2) `guidelineid` from the drug table.  
-This is necessary because some guidelines use class names (e.g. simvastatin → `"SLCO1B1, ABCG2, CYP2C9, and Statins"`, codeine → `"CYP2D6, OPRM1, COMT, and Opioids"`).
+## Usage
 
----
+See `if __name__ == "__main__"` in `67_CPIC.py` for runnable examples
+covering: single-drug query, batch drug query, gene-only pair lookup, and
+guideline-only retrieval.
 
-## Quick start
+## Key Fields
 
-```python
-from 67_CPIC import query
+**drug_info**: `drugid`, `name`, `drugbankid`, `atcid`, `flowchart`.
 
-# Single drug
-results = query("clopidogrel")
+**guidelines**: `name`, `url`, `version`.
 
-# Multiple drugs
-results = query(["warfarin", "codeine"])
+**gene_drug_pairs**: `genesymbol`, `drugid`, `cpiclevel`, `clinpgxlevel`,
+`pgxtesting`, `citations`.
 
-# Query by gene symbol
-results = query("CYP2D6", fields="pairs")
-
-# Specific fields only
-results = query("codeine", fields="guidelines")
-results = query("codeine", fields="recommendations")
-```
-
----
-
-## `query()` interface
-
-```
-query(entities, fields="all") -> list[dict]
-```
-
-| Parameter  | Type               | Description |
-|------------|--------------------|-------------|
-| `entities` | `str \| list[str]` | Drug name(s) or gene symbol(s) |
-| `fields`   | `str`              | `"all"` — everything; `"guidelines"` / `"pairs"` / `"recommendations"` |
-
-### Return structure (`fields="all"`)
-
-```json
-[
-  {
-    "query": "clopidogrel",
-    "drug_info": [
-      {"drugid": "RxNorm:32968", "name": "clopidogrel",
-       "drugbankid": "DB00758", "atcid": ["B01AC04"], "flowchart": "..."}
-    ],
-    "guidelines": [
-      {"name": "CYP2C19 and Clopidogrel", "url": "...", "version": 66}
-    ],
-    "gene_drug_pairs": [
-      {"genesymbol": "CYP2C19", "drugid": "RxNorm:32968",
-       "cpiclevel": "A", "clinpgxlevel": "1A",
-       "pgxtesting": "Actionable PGx", "citations": ["21716271", ...]}
-    ],
-    "recommendations": [
-      {"drugid": "RxNorm:32968",
-       "phenotypes": {"CYP2C19": "Ultrarapid Metabolizer"},
-       "implications": {"CYP2C19": "Increased active metabolite ..."},
-       "recommendation": "Use at standard dose (75 mg/day)",
-       "classification": "Strong",
-       "population": "CVI ACS PCI"}
-    ]
-  }
-]
-```
-
-On error: `{"query": "xxx", "error": "..."}`.
-
----
-
-## Lower-level functions
-
-| Function | Input | Output | Description |
-|----------|-------|--------|-------------|
-| `get_drug_info(drug_name)` | drug name | `list[dict]` | Drug table lookup (fuzzy) |
-| `get_guidelines(drug_name=None)` | optional drug name | `list[dict]` | All or filtered guidelines |
-| `get_gene_drug_pairs(drug_name=None, gene=None)` | optional filters | `list[dict]` | Gene-drug pairs (name auto-resolved to drugid) |
-| `get_recommendations(drug_name)` | drug name | `list[dict]` | Dosing recommendations (name auto-resolved) |
-
----
+**recommendations**: `drugid`, `phenotypes`, `implications`,
+`drugrecommendation`, `classification`, `population`.
 
 ## Notes
 
-- CPIC levels: **A** = guideline published, **B** = in progress, **C/D** = lower evidence.
-- Gene symbols are auto-detected (uppercase, ≤12 chars) and routed to `genesymbol` filter.
-- Drug names are fuzzy-matched via `ilike` on the `/v1/drug` table.
-- No rate limit documented, but keep requests reasonable.
+- The API uses `drugid` in `pair` and `recommendation`; the script correctly
+  resolves names through `/v1/drug` first.
+- Live validation on 2026-03-15 confirmed the official CPIC endpoint
+  `https://api.cpicpgx.org/v1/drug?name=ilike.*clopidogrel*` returned JSON with
+  a `clopidogrel` record.
+- Gene symbols are heuristically auto-detected in `query()`. Short uppercase
+  strings may be treated as genes first.
+
+## Data Source
+
+- **Homepage**: <https://cpicpgx.org/>
+- **API docs**: <https://cpicpgx.org/cpic-data/>
+- **API base**: <https://api.cpicpgx.org/v1>
+- **Paper**: <https://pubmed.ncbi.nlm.nih.gov/33479744/>
+
