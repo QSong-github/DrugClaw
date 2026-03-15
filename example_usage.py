@@ -15,6 +15,20 @@ Optional parameters (any mode)
 -------------------------------
   resource_filter  : list[str]  — restrict to specific skill names, e.g. ["ChEMBL","DGIdb"]
   omics_constraints: OmicsConstraints — biological constraints (genes, pathways, diseases)
+
+Implemented skills (25)
+-----------------------
+  DTI:            ChEMBL, BindingDB, DGIdb, Open Targets Platform, TTD, STITCH
+  ADR:            FAERS, SIDER
+  Knowledgebase:  UniD3, DrugBank, IUPHAR/BPS Guide to Pharmacology, DrugCentral, CPIC
+  Mechanism:      DRUGMECHDB
+  Labeling:       openFDA Human Drug, DailyMed, MedlinePlus Drug Info
+  Ontology:       RxNorm, ChEBI
+  Repurposing:    RepoDB
+  Pharmacogenomics: PharmGKB
+  DDI:            MecDDI, DDInter, KEGG Drug
+  Drug Review:    WebMD Drug Reviews
+  Web Search:     WebSearch (always-on)
 """
 
 from drugclaw.config import Config
@@ -49,17 +63,17 @@ def _print_result(result: dict) -> None:
 # ---------------------------------------------------------------------------
 
 def example_1_graph_basic():
-    """Full multi-agent graph reasoning on a drug mechanism query."""
+    """Full multi-agent graph reasoning on an adverse event query."""
     print("\n" + "="*80)
-    print("EXAMPLE 1: GRAPH mode — imatinib mechanism (default)")
+    print("EXAMPLE 1: GRAPH mode — FAERS adverse events for ibuprofen")
     print("="*80)
 
     system = DrugClawSystem(Config())
 
     result = system.query(
-        "What are the top 5 most common adverse events reported for the drug IBUPROFEN?",
+        "Give me information about the drug ANTIMICROBIAL?",
         thinking_mode=ThinkingMode.GRAPH,   # default; can be omitted
-        resource_filter=["FAERS"],
+        resource_filter=["UniD3"],  # pin to specific skills (optional
     )
     _print_result(result)
 
@@ -117,8 +131,8 @@ def example_3_simple():
     result = system.query(
         "What are the known adverse drug reactions of aspirin?",
         thinking_mode=ThinkingMode.SIMPLE,
-        # Optionally restrict to ADR-focused skills
-        resource_filter=["SIDER", "nSIDES", "FAERS", "ADReCS"],
+        # Pin to the two implemented ADR skills
+        resource_filter=["SIDER", "FAERS"],
     )
     _print_result(result)
 
@@ -148,7 +162,7 @@ def example_4_simple_auto():
 
 def example_5_web_only():
     """
-    WEB_ONLY mode: skips all 68 structured skills, searches DuckDuckGo + PubMed.
+    WEB_ONLY mode: skips all structured skills, searches DuckDuckGo + PubMed.
     Useful for very recent data, news, or broad literature sweeps.
     """
     print("\n" + "="*80)
@@ -202,29 +216,29 @@ def example_6_cancer_repurposing():
 
 
 # ---------------------------------------------------------------------------
-# Example 7 — resource_filter with SIMPLE mode (pin exact datasets)
+# Example 7 — resource_filter with SIMPLE mode (pin exact skills)
 # ---------------------------------------------------------------------------
 
 def example_7_pinned_resources_simple():
     """
-    Pin multiple specific skills across different subcategories in SIMPLE mode.
+    Pin multiple implemented skills across different subcategories in SIMPLE mode.
     Useful when you know exactly which knowledge bases are relevant.
     """
     print("\n" + "="*80)
-    print("EXAMPLE 7: SIMPLE mode — multi-resource pin (toxicity + combination)")
+    print("EXAMPLE 7: SIMPLE mode — multi-resource pin (DDI + labeling + ontology)")
     print("="*80)
 
     system = DrugClawSystem(Config())
 
     result = system.query(
-        "What is known about metformin and its drug combinations or toxicity?",
+        "What is known about metformin drug interactions and prescribing information?",
         thinking_mode=ThinkingMode.SIMPLE,
         resource_filter=[
-            "LiverTox",       # hepatotoxicity
-            "DILIrank",       # DILI ranking
-            "DrugCombDB",     # combination database
-            "DrugComb",       # synergy data
-            "ChEMBL",         # bioactivity
+            "MecDDI",       # mechanism-based DDI
+            "DDInter",      # drug-drug interactions
+            "DailyMed",     # prescribing / labeling
+            "RxNorm",       # drug nomenclature / ontology
+            "ChEMBL",       # bioactivity
         ],
     )
     _print_result(result)
@@ -265,7 +279,13 @@ def main():
 
 if __name__ == "__main__":
     # Run a single quick example by default
-    example_1_graph_basic()
+    # example_1_graph_basic()
+    example_2_graph_constrained()
+    # example_3_simple()
+    # example_4_simple_auto()
+    # example_5_web_only()
+    # example_6_cancer_repurposing()
+    # example_7_pinned_resources_simple()
 
     # Uncomment to run all examples:
     # main()
