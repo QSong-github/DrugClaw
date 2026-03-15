@@ -89,6 +89,7 @@ python -m drugclaw run --query "What are the known drug targets of imatinib?"
 
 ```bash
 pip install -e . --no-build-isolation
+drugclaw doctor
 drugclaw demo
 drugclaw run --query "What are the known drug targets of imatinib?"
 ```
@@ -108,7 +109,22 @@ python run_minimal.py demo --preset label
 python run_minimal.py run --query "What prescribing and safety information is available for metformin?"
 ```
 
-### 6. 如果你想自己写调用代码
+### 6. 先做环境自检
+
+如果你想先确认本地环境是否具备体验条件，可以执行：
+
+```bash
+python -m drugclaw doctor
+```
+
+它会检查：
+
+- `navigator_api_keys.json` 是否存在且字段完整
+- `langgraph` 和 `openai` 是否可导入
+- 内置 demo 依赖的资源当前是否具备运行条件
+- 是否已经安装出 `drugclaw` 命令
+
+### 7. 如果你想自己写调用代码
 
 ```python
 from drugclaw.config import Config
@@ -127,7 +143,7 @@ result = system.query(
 print(result["answer"])
 ```
 
-### 7. 三种思考模式
+### 8. 三种思考模式
 
 ```python
 from drugclaw.models import ThinkingMode
