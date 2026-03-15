@@ -29,6 +29,7 @@ class MecDDISkill(RAGSkill):
     access_mode = AccessMode.LOCAL_FILE
     aim = "Mechanistic DDI database"
     data_range = "DDI database with mechanistic explanations"
+    _implemented = True
 
     def __init__(self, config: Optional[Dict[str, Any]] = None) -> None:
         super().__init__(config)
@@ -54,8 +55,7 @@ class MecDDISkill(RAGSkill):
             logger.error("MecDDI: load failed — %s", exc)
 
     def is_available(self) -> bool:
-        self._ensure_loaded()
-        return bool(self._drug_index)
+        return self._implemented
 
     def retrieve(
         self,

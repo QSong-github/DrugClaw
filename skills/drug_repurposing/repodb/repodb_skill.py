@@ -38,6 +38,7 @@ class RepoDBSkill(DatasetRAGSkill):
     access_mode = AccessMode.DATASET
     aim = "Drug repositioning outcomes"
     data_range = "Labelled drug-disease repositioning pairs from clinical trials"
+    _implemented = True
 
     def __init__(self, config: Optional[Dict[str, Any]] = None) -> None:
         super().__init__(config)
@@ -81,8 +82,7 @@ class RepoDBSkill(DatasetRAGSkill):
             logger.error("RepoDB: cannot load %s — %s", path, exc)
 
     def is_available(self) -> bool:
-        self._ensure_loaded()
-        return bool(self._rows)
+        return self._implemented
 
 
 

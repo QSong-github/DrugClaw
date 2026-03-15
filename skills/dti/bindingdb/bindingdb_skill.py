@@ -38,6 +38,7 @@ class BindingDBSkill(RAGSkill):
     access_mode = AccessMode.REST_API
     aim = "Binding affinity data"
     data_range = "Experimentally measured binding constants (Ki, Kd, IC50)"
+    _implemented = True
 
     def __init__(self, config: Optional[Dict[str, Any]] = None) -> None:
         super().__init__(config)

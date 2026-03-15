@@ -39,6 +39,7 @@ class UniD3Skill(RAGSkill):
     access_mode = AccessMode.LOCAL_FILE
     aim = "Drug discovery knowledge graph"
     data_range = "Multi-KG + drug-disease datasets from 150 000+ PubMed articles"
+    _implemented = True
 
     # Key → (description, entity types)
     GRAPH_TYPES = {
@@ -137,8 +138,7 @@ class UniD3Skill(RAGSkill):
         return triplets
 
     def is_available(self) -> bool:
-        self._ensure_loaded()
-        return bool(self._graphs)
+        return self._implemented
 
     def retrieve(
         self,

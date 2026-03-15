@@ -42,6 +42,7 @@ class STITCHSkill(RAGSkill):
     access_mode = AccessMode.REST_API
     aim = "Drug–protein interactions"
     data_range = "Chemical–protein interaction network (STRING extension)"
+    _implemented = True
 
     def __init__(self, config: Optional[Dict[str, Any]] = None) -> None:
         super().__init__(config)

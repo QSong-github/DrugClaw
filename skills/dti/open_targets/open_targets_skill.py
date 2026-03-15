@@ -42,6 +42,7 @@ class OpenTargetsSkill(RAGSkill):
     access_mode = AccessMode.REST_API
     aim = "Drug-target evidence"
     data_range = "Curated + ML drug-target evidence scores"
+    _implemented = True
 
     def __init__(self, config: Optional[Dict[str, Any]] = None) -> None:
         super().__init__(config)

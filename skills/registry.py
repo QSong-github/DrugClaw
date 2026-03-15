@@ -219,120 +219,42 @@ class SkillRegistry:
     # ------------------------------------------------------------------
     # Skill descriptions & example code for Code Agent
     # ------------------------------------------------------------------
-
-    # Mapping from skill name → example file name in the examples/ folder
-    _SKILL_EXAMPLE_MAP: Dict[str, str] = {
-        "UniD3": "01_UniD3.py",
-        "RepoDB": "02_RepoDB.py",
-        "FAERS": "03_FAERS.py",
-        "DRUGMECHDB": "04_DRUGMECHDB.py",
-        "openFDA Human Drug": "05_openFDA_Human_Drug.py",
-        "DailyMed": "06_DailyMed.py",
-        "DrugBank": "07_DrugBank.py",
-        "RxNorm": "08_RxNorm.py",
-        "DrugEHRQA": "09_DrugEHRQA.py",
-        "WebMD Drug Reviews": "10_WebMD_Drug_Reviews.py",
-        "ChEMBL": "11_ChEMBL.py",
-        "Open Targets Platform": "12_Open_Targets_Platform.py",
-        "IUPHAR/BPS Guide to Pharmacology": "13_IUPHAR_BPS_Guide_to_Pharmacology.py",
-        "SIDER": "14_SIDER.py",
-        "nSIDES": "15_nSIDES.py",
-        "DGIdb": "16_DGIdb.py",
-        "TTD": "17_TTD.py",
-        "DrugCentral": "18_DrugCentral.py",
-        "MecDDI": "19_MecDDI.py",
-        "DDInter": "20_DDInter.py",
-        "STITCH": "21_STITCH.py",
-        "PharmGKB": "22_PharmGKB.py",
-        "BindingDB": "23_BindingDB.py",
-        "DRKG": "24_DRKG.py",
-        "OREGANO": "25_OREGANO.py",
-        "Drug Repurposing Hub": "26_Drug_Repurposing_Hub.py",
-        "ATC/DDD": "27_ATC_DDD.py",
-        "NDF-RT": "28_NDF_RT.py",
-        "ChEBI": "29_ChEBI.py",
-        "DrugCombDB": "30_DrugCombDB.py",
-        "CDCDB": "31_CDCDB.py",
-        "DrugComb": "32_DrugComb.py",
-        "DCDB": "33_DCDB.py",
-        "LiverTox": "34_LiverTox.py",
-        "DILIrank": "35_DILIrank.py",
-        "DILI": "36_DILI.py",
-        "UniTox": "37_UniTox.py",
-        "PharmKG": "38_PharmKG.py",
-        "WHO Essential Medicines List": "39_WHO_Essential_Medicines_List.py",
-        "FDA Orange Book": "40_FDA_Orange_Book.py",
-        "CPIC": "41_CPIC.py",
-        "TarKG": "42_TarKG.py",
-        "PROMISCUOUS 2.0": "43_PROMISCUOUS.py",
-        "GDKD": "44_GDKD.py",
-        "DTC": "45_DTC.py",
-        "VigiAccess": "46_VigiAccess.py",
-        "ADReCS": "47_ADReCS.py",
-        "DrugRepoBank": "48_DrugRepoBank.py",
-        "RepurposeDrugs": "49_RepurposeDrugs.py",
-        "DrugRepurposing Online": "50_DrugRepurposing_Online.py",
-        "CancerDR": "51_CancerDR.py",
-        "EK-DRD": "52_EK_DRD.py",
-        "GDSC": "53_GDSC.py",
-        "SemaTyP": "54_SemaTyP.py",
-        "Drugs.com": "55_Drugs_com.py",
-        "RxList Drug Descriptions": "56_RxList.py",
-        "MedlinePlus Drug Info": "57_MedlinePlus.py",
-        "askapatient": "58_askapatient.py",
-        "Drug Reviews (Drugs.com)": "59_Drug_Reviews_Drugs_com.py",
-        "DDI Corpus 2013": "60_DDI_Corpus_2013.py",
-        "DrugProt": "61_DrugProt.py",
-        "ADE Corpus": "62_ADE_Corpus.py",
-        "n2c2 2018 Track 2": "63_n2c2_2018.py",
-        "CADEC": "64_CADEC.py",
-        "PsyTAR": "65_PsyTAR.py",
-        "TAC 2017 ADR": "66_TAC_2017_ADR.py",
-        "PHEE": "67_PHEE.py",
-        "KEGG Drug": "68_KEGG_Drug.py",
-        "DrugMechDB": "04_DRUGMECHDB.py",
-    }
+    # Each implemented skill now carries its own example.py + SKILL.md
+    # in its package directory (e.g. skills/dti/chembl/example.py).
+    # The Code Agent reads these directly from the skill instance.
+    # ------------------------------------------------------------------
 
     def get_skill_description(self, name: str) -> str:
         """
         Return a human-readable description of a skill for the Code Agent.
 
-        Includes skill name, subcategory, aim, data_range, access_mode.
+        For implemented skills, returns the SKILL.md content.
+        For stubs, returns metadata summary.
         """
         skill = self._skills.get(name)
         if skill is None:
             return f"Skill '{name}' not registered."
+        if skill._implemented:
+            return skill.get_skill_md()
         return (
             f"Skill: {skill.name}\n"
             f"Subcategory: {skill.subcategory}\n"
             f"Access Mode: {skill.access_mode}\n"
             f"Aim: {skill.aim}\n"
             f"Data Range: {skill.data_range}\n"
+            f"Status: NOT IMPLEMENTED (stub only)\n"
         )
 
     def get_skill_example_code(self, name: str) -> str:
         """
-        Return the example usage code for a skill (from examples/ folder).
+        Return the example usage code for a skill (from its own directory).
 
+        Each implemented skill has an example.py in its package directory.
         Falls back to the skill's get_description() if no example file found.
         """
-        example_file = self._SKILL_EXAMPLE_MAP.get(name, "")
-        if example_file:
-            examples_dir = os.path.join(
-                os.path.dirname(os.path.dirname(os.path.abspath(__file__))),
-                "examples",
-            )
-            example_path = os.path.join(examples_dir, example_file)
-            if os.path.exists(example_path):
-                try:
-                    with open(example_path, "r", encoding="utf-8") as f:
-                        return f.read()
-                except Exception:
-                    pass
-        # Fallback
         skill = self._skills.get(name)
         if skill is not None:
-            return f"# No example file for {name}\n# {skill.get_description()}"
+            return skill.get_example_code()
         return f"# No example available for {name}"
 
     def get_skill_info_for_coder(self, name: str) -> str:
@@ -345,8 +267,8 @@ class SkillRegistry:
 
     def get_all_skill_summaries(self) -> str:
         """
-        Return a compact summary of all registered skills for the Code Agent
-        to select from (name + aim + access_mode, one per line).
+        Return a compact summary of all registered & implemented skills
+        for the Code Agent to select from (name + aim + access_mode, one per line).
         """
         lines = []
         for name, skill in self._skills.items():

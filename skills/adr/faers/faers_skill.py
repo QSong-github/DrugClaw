@@ -39,6 +39,7 @@ class FAERSSkill(RAGSkill):
     access_mode = AccessMode.REST_API
     aim = "Post-market drug safety surveillance"
     data_range = "FDA spontaneous adverse event reports (all marketed drugs)"
+    _implemented = True
 
     def __init__(self, config: Optional[Dict[str, Any]] = None) -> None:
         super().__init__(config)
@@ -87,14 +88,7 @@ class FAERSSkill(RAGSkill):
     # ------------------------------------------------------------------
 
     def is_available(self) -> bool:
-        """Probe the API with a minimal request to confirm connectivity."""
-        try:
-            url = self._build_url({"limit": "1"})
-            self._get(url)
-            return True
-        except Exception as exc:
-            logger.warning("FAERS: availability check failed — %s", exc)
-            return False
+        return self._implemented
 
     def retrieve(
         self,
