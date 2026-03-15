@@ -1,47 +1,50 @@
 # DrugClaw
 
 <p align="center">
-  <img src="./DrugClaw_Logo.png" alt="DrugClaw_Logo.png" width="520" />
+  <img src="./DrugClaw_Logo.png" alt="DrugClaw Logo" width="520" />
 </p>
 
 <p align="center">
-  <strong>面向药物知识检索、推理与证据综合的 Agentic RAG 系统</strong>
+  <strong>Agentic RAG for Drug Knowledge Retrieval, Reasoning, and Evidence Synthesis</strong>
 </p>
 
 <p align="center">
-  <img alt="Domain" src="https://img.shields.io/badge/领域-药物智能-1f6feb">
-  <img alt="Resources" src="https://img.shields.io/badge/资源-68%20个精选-0a7f5a">
-  <img alt="Skills" src="https://img.shields.io/badge/已实现技能-25-f59e0b">
-  <img alt="Modes" src="https://img.shields.io/badge/模式-GRAPH%20%7C%20SIMPLE%20%7C%20WEB__ONLY-7c3aed">
+  <a href="./README_CN.md">中文文档 / Chinese Version</a>
 </p>
 
-DrugClaw 是一个围绕药物任务构建的多智能体 RAG 系统，专门处理通用助手经常答不深、答不稳的问题，例如药物靶点、药物不良反应、药物相互作用、作用机制、药物基因组学、药物重定位，以及跨异构生物医学资源的证据综合。
+<p align="center">
+  <img alt="Domain" src="https://img.shields.io/badge/Domain-Drug%20Intelligence-1f6feb">
+  <img alt="Resources" src="https://img.shields.io/badge/Resources-68%20Curated-0a7f5a">
+  <img alt="Skills" src="https://img.shields.io/badge/Implemented%20Skills-25-f59e0b">
+  <img alt="Modes" src="https://img.shields.io/badge/Modes-GRAPH%20%7C%20SIMPLE%20%7C%20WEB__ONLY-7c3aed">
+</p>
 
-它不是“通用 RAG 套一层生物医学提示词”，而是从资源组织、检索策略、推理链路到回答形式，都明确面向 drug-native 场景设计。
+DrugClaw is a drug-centered multi-agent RAG system designed for queries that generic assistants often handle poorly: drug targets, adverse drug reactions, drug-drug interactions, mechanisms of action, pharmacogenomics, repurposing, and evidence synthesis across heterogeneous biomedical resources.
 
-## 为什么是 DrugClaw
+It is not a generic RAG stack with a biomedical prompt on top. DrugClaw is opinionated around drug-native tasks from resource organization to retrieval strategy, reasoning flow, and final answer structure.
 
-大多数生物医学问答系统停留在“检索几段文本然后总结”的层面，但药物问题真正难的地方，往往在于能不能把靶点证据、ADR 来源、DDI 机制、标签信息和 PGx 约束这些细节讲清楚。也有一些工具虽然接入了很多数据库，却把所有资源强行压成同一种接口，最后牺牲了资源本身的表达力；还有一些系统更强调对话体验或代理外壳，但底层缺少足够密集、结构化且可追溯的药物资源支撑，最终还是回到“语言流畅但证据偏薄”。
+## Why DrugClaw
 
-- 将 **68 个精选药物资源**组织为可导航的 **15 类技能树**。
-- 通过 **Code Agent** 为不同资源现写查询代码，而不是强行塞进单一死板接口。
-- 支持 **图结构推理**，更适合多跳药物证据综合。
-- 保留 **Web Search** 作为最新文献和外部证据的补充通道。
-- 从设计上就面向 **药物原生任务**，而不是泛化的 biomedical branding。
+Most biomedical QA systems stop at "retrieve a few passages and summarize them." Drug questions are harder: they require precise handling of target evidence, ADR provenance, DDI mechanisms, labeling details, and PGx constraints. Some tools connect many databases but flatten them into a single rigid interface; others optimize for conversational UX while relying on weak, thin, or poorly traceable evidence.
 
-换句话说，DrugClaw 的优势不是“再做一个会说话的助手”，而是尽量把药物资源的密度、检索的真实性和证据综合能力同时拉起来。它更适合回答那些需要跨多个资源交叉验证、需要说明证据来自哪里、以及需要把检索结果进一步组织成推理链的问题。
+- Organizes **68 curated drug resources** into a navigable **15-subcategory skill tree**
+- Uses a **Code Agent** to query each source in its native style instead of forcing one rigid abstraction
+- Supports **graph-based reasoning** for multi-hop evidence synthesis
+- Keeps **Web Search** as a fallback for recent literature and external evidence
+- Built around **drug-native tasks**, not generic biomedical branding
 
+In short, DrugClaw is not trying to be just another fluent assistant. Its goal is to raise resource density, retrieval fidelity, and evidence-grounded reasoning at the same time.
 
-## 快速开始
+## Quick Start
 
-### 1. 安装依赖
+### 1. Install dependencies
 
 ```bash
 cd /data/boom/Agent/DrugClaw
 pip install langgraph openai
 ```
 
-可选依赖，仅在你要启用对应 CLI 型 skill 时安装：
+Optional dependencies for selected CLI-based skills:
 
 ```bash
 pip install chembl_webresource_client
@@ -49,15 +52,15 @@ pip install libchebipy
 pip install bioservices
 ```
 
-### 2. 准备 `navigator_api_keys.json`
+### 2. Prepare `navigator_api_keys.json`
 
-先复制模板文件：
+First copy the template:
 
 ```bash
 cp navigator_api_keys.example.json navigator_api_keys.json
 ```
 
-然后填写你自己的真实凭证。模板格式如下：
+Then fill in your real credentials:
 
 ```json
 {
@@ -66,26 +69,26 @@ cp navigator_api_keys.example.json navigator_api_keys.json
 }
 ```
 
-当前版本会优先读取：
+DrugClaw currently resolves keys in this order:
 
-- 环境变量 `DRUGCLAW_KEY_FILE`
-- 仓库根目录下的 `navigator_api_keys.json`
+- `DRUGCLAW_KEY_FILE`
+- `navigator_api_keys.json` in the repository root
 
-### 3. 准备本地资源目录 `resources_metadata/`
+### 3. Prepare local resources under `resources_metadata/`
 
-不少 skill 的访问模式是 `LOCAL_FILE`。这类资源需要你先把数据放到当前仓库的 `resources_metadata/` 目录，不能默认依赖在线接口。
+Many skills use `LOCAL_FILE` access mode. Those resources must exist under the local `resources_metadata/` tree rather than being assumed online.
 
-推荐的数据解析顺序：
+Recommended resolution order:
 
-- 先用当前仓库里已经存在的 `resources_metadata/...`
-- 如果本地缺失，优先从维护好的镜像仓库同步
-- 只有镜像也没有时，再回到原始官网或数据下载页手动获取
+- Use files already present under `resources_metadata/...`
+- If missing, sync from the maintained mirror first
+- Only fall back to the original source site if the mirror does not contain the data
 
-当前维护的镜像仓库：
+Maintained mirror:
 
 - `https://huggingface.co/datasets/Mike2481/DrugClaw_resources_data`
 
-目录约定示例：
+Directory examples:
 
 - `resources_metadata/dti/...`
 - `resources_metadata/adr/...`
@@ -93,11 +96,11 @@ cp navigator_api_keys.example.json navigator_api_keys.json
 - `resources_metadata/drug_repurposing/...`
 - `resources_metadata/ddi/...`
 
-如果某些 `SKILL.md`、`example.py` 或旧文档里还保留历史绝对路径，只把它们当旧示例；实际应以当前仓库下的 `resources_metadata/...` 为准。
+If some old `SKILL.md`, `example.py`, or archived docs still show absolute paths, treat them as legacy examples. The active convention is the repository-local `resources_metadata/...` layout.
 
-### 4. 直接运行官方 CLI Demo
+### 4. Run the official CLI demo
 
-这是当前最推荐的体验入口。无需安装也可以直接用模块方式运行：
+This is the recommended first experience. You can run it without installation:
 
 ```bash
 python -m drugclaw list
@@ -105,19 +108,19 @@ python -m drugclaw doctor
 python -m drugclaw demo
 ```
 
-默认会固定使用：
+The default demo uses:
 
-- `SIMPLE` 模式
-- 在线标签类资源
-- 默认 metformin 说明书与安全信息查询
+- `SIMPLE` mode
+- online labeling-style resources
+- a metformin labeling and safety query
 
-你也可以手动运行自定义问题：
+You can also run your own query:
 
 ```bash
 python -m drugclaw run --query "What are the known drug targets of imatinib?"
 ```
 
-### 5. 安装后直接使用 `drugclaw` 命令
+### 5. Install the `drugclaw` command
 
 ```bash
 pip install -e . --no-build-isolation
@@ -128,63 +131,61 @@ drugclaw demo
 drugclaw run --query "What are the known drug targets of imatinib?"
 ```
 
-### 6. 兼容快捷方式：`run_minimal.py`
+### 6. Compatibility shortcut: `run_minimal.py`
 
-这个脚本现在等价于一个 demo 快捷入口：
+This script now acts as a lightweight shortcut to the demo flow:
 
 ```bash
 python run_minimal.py
 ```
 
-也可以把参数原样透传给 CLI：
+You can also pass CLI arguments through it:
 
 ```bash
 python run_minimal.py demo --preset label
 python run_minimal.py run --query "What prescribing and safety information is available for metformin?"
 ```
 
-### 7. 先做环境自检
-
-如果你想先确认本地环境是否具备体验条件，可以执行：
+### 7. Run environment checks first
 
 ```bash
 python -m drugclaw doctor
 ```
 
-它会检查：
+It checks:
 
-- `navigator_api_keys.json` 是否存在且字段完整
-- `langgraph` 和 `openai` 是否可导入
-- 内置 demo 依赖的资源当前是否具备运行条件
-- 是否已经安装出 `drugclaw` 命令
-- `navigator_api_keys.json` 是否仍被 Git 跟踪
-- 是否已启用仓库自带的 Git hooks
+- whether `navigator_api_keys.json` exists and is complete
+- whether `langgraph` and `openai` are importable
+- whether built-in demo presets have the resources they need
+- whether the `drugclaw` command is installed
+- whether `navigator_api_keys.json` is still tracked by Git
+- whether repository Git hooks are enabled
 
-### 8. 启用防泄露 Git hooks
+### 8. Enable secret-protection Git hooks
 
 ```bash
 git config core.hooksPath .githooks
 ```
 
-启用后会阻止：
+These hooks block:
 
-- 提交 `navigator_api_keys.json`
-- 推送一个仍在被 Git 跟踪的 `navigator_api_keys.json`
+- committing `navigator_api_keys.json`
+- pushing a repository where `navigator_api_keys.json` is still tracked
 
-### 9. 查看内置 demo 和推荐入口
+### 9. List built-in demos and recommended entrypoints
 
 ```bash
 python -m drugclaw list
 ```
 
-它会列出：
+It shows:
 
-- 内置 demo 预设
-- 三种思考模式
-- 推荐的首条体验命令
-- 常用资源组合
+- built-in demo presets
+- supported thinking modes
+- recommended first commands
+- common resource filter combinations
 
-### 10. 如果你想自己写调用代码
+### 10. Call DrugClaw from Python
 
 ```python
 from drugclaw.config import Config
@@ -203,7 +204,7 @@ result = system.query(
 print(result["answer"])
 ```
 
-### 11. 三种思考模式
+### 11. Thinking modes
 
 ```python
 from drugclaw.models import ThinkingMode
@@ -213,96 +214,100 @@ system.query("...", thinking_mode=ThinkingMode.SIMPLE)
 system.query("...", thinking_mode=ThinkingMode.WEB_ONLY)
 ```
 
-## 核心亮点
+## Highlights
 
-### 1. Vibe-Coding 检索
+<p align="center">
+  <img src="./DrugClaw.png" alt="DrugClaw Overview" width="760" />
+</p>
 
-每个 skill 都带有自己的 `SKILL.md` 和 `example.py`。Code Agent 会读取这两份材料，理解资源原生调用方式，自动生成针对当前问题的查询代码并执行。
+### 1. Vibe-coding retrieval
 
-这意味着 DrugClaw 不需要强迫所有数据库、API、数据集都长成同一种接口。
+Each skill ships with its own `SKILL.md` and `example.py`. The Code Agent reads both, learns the source's native usage pattern, and generates query code dynamically for the current task.
 
-对于 `LOCAL_FILE` 类型的 skill，推荐的默认行为是：
+That means DrugClaw does not require every database, API, or dataset to pretend to be the same thing.
 
-- 先检查当前仓库的 `resources_metadata/...`
-- 若缺失，再提示使用 Hugging Face 镜像仓库补齐
-- 不要默认假设原始下载链接仍然可用
+For `LOCAL_FILE` skills, the recommended default behavior is:
 
-### 2. 明确围绕药物任务组织
+- check `resources_metadata/...` first
+- if missing, guide the user to the maintained Hugging Face mirror
+- do not assume the original download endpoint is still reliable
 
-当前已落地 **25 个可用 skill**，覆盖：
+### 2. Organized around drug tasks
 
-- 药物靶点与活性
-- 不良反应与药物警戒
-- 药物知识库
-- 药物机制
-- 药品标签与说明书
-- 药物本体与标准化
-- 药物重定位
-- 药物基因组学
-- 药物相互作用
-- 患者评价
+DrugClaw currently provides **25 implemented skills** across:
 
-### 3. 三种工作模式
+- drug targets and activity
+- adverse drug reactions and pharmacovigilance
+- drug knowledgebases
+- mechanisms of action
+- labeling and prescribing information
+- ontology and normalization
+- drug repurposing
+- pharmacogenomics
+- drug-drug interactions
+- patient reviews
 
-- `GRAPH`：检索 -> 建图 -> 重排 -> 作答 -> 反思
-- `SIMPLE`：检索后直接作答
-- `WEB_ONLY`：只走在线检索和文献搜索
+### 3. Three working modes
 
-### 4. 适合证据综合型问题
+- `GRAPH`: retrieve -> graph build -> rerank -> respond -> reflect
+- `SIMPLE`: retrieve and answer directly
+- `WEB_ONLY`: use only online search and literature retrieval
 
-DrugClaw 适合回答的问题包括：
+### 4. Built for evidence synthesis
 
-- “伊马替尼已知的靶点、不良反应和相互作用风险有哪些？”
-- “哪些已批准药物可能重定位到三阴性乳腺癌？”
-- “氯吡格雷与 CYP2C19 有哪些药物基因组学建议？”
-- “华法林与 NSAIDs 之间是否存在临床上重要的相互作用？”
+DrugClaw is suitable for questions such as:
 
-## 架构
+- "What are the known targets, adverse effects, and interaction risks of imatinib?"
+- "Which approved drugs may be repurposed for triple-negative breast cancer?"
+- "What pharmacogenomic guidance exists for clopidogrel and CYP2C19?"
+- "Are there clinically meaningful interactions between warfarin and NSAIDs?"
+
+## Architecture
 
 ```text
-用户问题
+User Query
    |
    v
 Retriever Agent
-   |- 浏览 15 类技能树
-   |- 抽取关键实体
-   |- 选择合适资源
+   |- navigates the 15-subcategory skill tree
+   |- extracts key entities
+   |- selects relevant resources
    |
    v
 Code Agent
-   |- 读取 SKILL.md + example.py
-   |- 生成定制查询代码
-   |- 执行资源特定检索
+   |- reads SKILL.md + example.py
+   |- writes custom query code
+   |- executes resource-specific retrieval
    |
-   +--> SIMPLE 模式 --> Responder --> 最终回答
+   +--> SIMPLE mode --> Responder --> Final Answer
    |
-   +--> GRAPH 模式
+   +--> GRAPH mode
          -> Graph Builder
          -> Reranker
          -> Responder
          -> Reflector
-         -> 可选 Web Search
-         -> 最终回答
+         -> optional Web Search
+         -> Final Answer
 ```
 
-## 已实现技能
+## Implemented Skills
 
-| 类别 | 技能 |
+| Category | Skills |
 | --- | --- |
 | DTI | ChEMBL, BindingDB, DGIdb, Open Targets Platform, TTD, STITCH |
 | ADR | FAERS, SIDER |
-| 药物知识库 | UniD3, DrugBank, IUPHAR/BPS Guide to Pharmacology, DrugCentral, CPIC |
-| 药物机制 | DRUGMECHDB |
-| 药品标签 | openFDA Human Drug, DailyMed, MedlinePlus Drug Info |
-| 药物本体 | RxNorm, ChEBI |
-| 药物重定位 | RepoDB |
-| 药物基因组学 | PharmGKB |
+| Drug Knowledgebase | UniD3, DrugBank, IUPHAR/BPS Guide to Pharmacology, DrugCentral, CPIC |
+| Drug Mechanism | DRUGMECHDB |
+| Drug Labeling | openFDA Human Drug, DailyMed, MedlinePlus Drug Info |
+| Drug Ontology | RxNorm, ChEBI |
+| Drug Repurposing | RepoDB |
+| Pharmacogenomics | PharmGKB |
 | DDI | MecDDI, DDInter, KEGG Drug |
-| 患者评价 | WebMD Drug Reviews |
+| Reviews | WebMD Drug Reviews |
 
-另有 `WebSearch` 作为 DuckDuckGo + PubMed 风格的外部检索补充。
+`WebSearch` is also available as an external retrieval supplement built around DuckDuckGo + PubMed style search.
 
-## 仓库结构
+## Repository Layout
 
 ```text
 drugclaw/
@@ -325,34 +330,34 @@ skills/
     README.md
 
 resources_metadata/
-  本地数据文件
+  local data files
 ```
 
-## 差异化优势
+## Differentiation
 
-### 资源原生查询，而不是强制统一抽象
+### Resource-native querying instead of forced abstraction
 
-DrugClaw 不要求每个生物医学资源都伪装成同一种数据库接口。
+DrugClaw does not require every biomedical source to be flattened into a single interface.
 
-### 图结构推理，而不是平铺式总结
+### Graph reasoning instead of flat summarization
 
-DrugClaw 可以把自由文本检索结果进一步转成三元组、子图、路径排序和基于证据的回答，而不是简单摘抄后拼接。
+DrugClaw can turn free-form retrieval results into triples, subgraphs, ranked paths, and evidence-aware answers rather than simply stitching together excerpts.
 
-### 药物优先，而不是泛生物医学包装
+### Drug-first scope instead of generic biomedical positioning
 
-这个系统明确围绕药物任务构建：DTI、ADR、DDI、标签、重定位、PGx 与机制推理，而不是一个泛化的 biomedical assistant。
+This system is built around drug tasks: DTI, ADR, DDI, labeling, repurposing, PGx, and mechanism reasoning.
 
-## 当前说明
+## Current Notes
 
-- 当前仓库在项目根目录下可直接导入运行。
-- `pyproject.toml` 的打包配置与当前目录结构还没有完全对齐。
-- 部分 skill 依赖 `resources_metadata/` 下的本地数据文件。
-- 默认 `GRAPH` 模式的多轮迭代能力还依赖进一步配置，例如 `MAX_ITERATIONS`。
+- The repository can be imported directly from the project root.
+- `pyproject.toml` is now aligned with the current package layout for local CLI usage.
+- Some skills still depend on local files under `resources_metadata/`.
+- Multi-iteration `GRAPH` behavior still depends on further configuration such as `MAX_ITERATIONS`.
 
-## 引用
+## Citation
 
-如果你在科研或产品中使用 DrugClaw，请同时引用本仓库以及对应 skill 所使用的原始上游数据资源。
+If you use DrugClaw in research or product work, cite this repository and the upstream resources used by the selected skills.
 
-## 许可证
+## License
 
 MIT License
