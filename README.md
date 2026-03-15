@@ -1,7 +1,7 @@
 # DrugClaw
 
 <p align="center">
-  <img src="./DrugClaw.png" alt="DrugClaw" width="220" />
+  <img src="./DrugClaw_Logo.png" alt="DrugClaw_Logo.png" width="220" />
 </p>
 
 <p align="center">
