@@ -76,3 +76,18 @@ output.
 - **Event types**: `Adverse_event`, `Potential_therapeutic_event`
 - **Main arguments**: Subject, Treatment, Effect
 - **Sub-arguments**: Subject (age, gender, race, population, disorder); Treatment (drug, dosage, freq, route, duration, disorder, combination.drug)
+
+## CLI Usage (Fallback)
+
+When vibe coding fails, run the skill script directly from the command line:
+
+```bash
+python skills/drug_nlp/phee/phee_skill.py <entity1> [entity2] ...
+```
+
+**Example:**
+```bash
+python skills/drug_nlp/phee/phee_skill.py phenytoin
+```
+
+The script imports functions from the sibling `example.py`, executes the query, and prints LLM-readable results to stdout.

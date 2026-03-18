@@ -75,3 +75,18 @@ PDBeChem, Wikipedia, etc.
 - **Docs**: <https://www.ebi.ac.uk/chebi/backend/api/docs/>
 - **License**: CC BY 4.0
 - **Citation**: Bento et al. *Nucleic Acids Res.* 2025, 54(D1), D1768–D1774.
+
+## CLI Usage (Fallback)
+
+When vibe coding fails, run the skill script directly from the command line:
+
+```bash
+python skills/drug_ontology/chebi/chebi_skill.py <entity1> [entity2] ...
+```
+
+**Example:**
+```bash
+python skills/drug_ontology/chebi/chebi_skill.py aspirin
+```
+
+The script imports functions from the sibling `example.py`, executes the query, and prints LLM-readable results to stdout.

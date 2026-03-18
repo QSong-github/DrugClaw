@@ -108,3 +108,18 @@ neighbors = get_neighbors("ASPIRIN")
 # Step 3: Filter neighbors by type
 diseases = [n for n in neighbors if n["neighbor"]["entity_type"] == "DISEASE"]
 ```
+
+## CLI Usage (Fallback)
+
+When vibe coding fails, run the skill script directly from the command line:
+
+```bash
+python skills/drug_knowledgebase/unid3/unid3_skill.py <entity1> [entity2] ...
+```
+
+**Example:**
+```bash
+python skills/drug_knowledgebase/unid3/unid3_skill.py aspirin
+```
+
+The script imports functions from the sibling `example.py`, executes the query, and prints LLM-readable results to stdout.

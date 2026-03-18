@@ -63,3 +63,18 @@ and JSON output.
 - **Coverage**: 448 555 drug combinations, 2 887 drugs, 124 cancer cell lines
 - **Synergy models**: ZIP, Bliss, Loewe, HSA — positive = synergy, negative = antagonism
 - **Citation**: Liu H et al. *Nucleic Acids Res.* 2020;48(D1):D871-D881
+
+## CLI Usage (Fallback)
+
+When vibe coding fails, run the skill script directly from the command line:
+
+```bash
+python skills/drug_combination/drugcombdb/drugcombdb_skill.py <entity1> [entity2] ...
+```
+
+**Example:**
+```bash
+python skills/drug_combination/drugcombdb/drugcombdb_skill.py doxorubicin
+```
+
+The script imports functions from the sibling `example.py`, executes the query, and prints LLM-readable results to stdout.

@@ -79,3 +79,18 @@ See `if __name__ == "__main__"` block in `18_DrugCentral.py` for runnable exampl
 - **DrugCentral**: <https://drugcentral.org/>
 - **Paper**: Avram et al., *Nucleic Acids Research* 2023, 51(D1):D1276–D1287. DOI: [10.1093/nar/gkac1085](https://doi.org/10.1093/nar/gkac1085)
 - **License**: CC BY-NC 4.0 (non-commercial)
+
+## CLI Usage (Fallback)
+
+When vibe coding fails, run the skill script directly from the command line:
+
+```bash
+python skills/drug_knowledgebase/drugcentral/drugcentral_skill.py <entity1> [entity2] ...
+```
+
+**Example:**
+```bash
+python skills/drug_knowledgebase/drugcentral/drugcentral_skill.py aspirin
+```
+
+The script imports functions from the sibling `example.py`, executes the query, and prints LLM-readable results to stdout.

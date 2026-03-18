@@ -52,3 +52,18 @@ Four CSV tables in `DATA_DIR`:
   (`/blue/qsong1/wang.qing/AgentLLM/DrugClaw/resources_metadata/drug_repurposing/DrugRepoBank`)
 - **Source**: https://awi.cuhk.edu.cn/DrugRepoBank/php/index.php
 - **Paper**: Huang et al., *Database* 2024, baae051. DOI:10.1093/database/baae051
+
+## CLI Usage (Fallback)
+
+When vibe coding fails, run the skill script directly from the command line:
+
+```bash
+python skills/drug_repurposing/drugrepobank/drugrepobank_skill.py <entity1> [entity2] ...
+```
+
+**Example:**
+```bash
+python skills/drug_repurposing/drugrepobank/drugrepobank_skill.py metformin
+```
+
+The script imports functions from the sibling `example.py`, executes the query, and prints LLM-readable results to stdout.

@@ -48,3 +48,18 @@ See `if __name__ == "__main__"` block in `59_WHO_EML.py` for runnable examples.
 - **Cache**: `who_eml_23.json` (auto-built on first run from PDF)
 - **License**: CC BY-NC-SA 3.0 IGO
 - **Dependency**: `pip install pypdf`
+
+## CLI Usage (Fallback)
+
+When vibe coding fails, run the skill script directly from the command line:
+
+```bash
+python skills/drug_knowledgebase/who_eml/who_eml_skill.py <entity1> [entity2] ...
+```
+
+**Example:**
+```bash
+python skills/drug_knowledgebase/who_eml/who_eml_skill.py aspirin
+```
+
+The script imports functions from the sibling `example.py`, executes the query, and prints LLM-readable results to stdout.

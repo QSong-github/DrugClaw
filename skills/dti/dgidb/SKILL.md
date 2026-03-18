@@ -47,3 +47,18 @@ See `if __name__ == "__main__"` block in `16_DGIdb.py` for runnable examples cov
 - **Endpoint**: `https://dgidb.org/api/graphql` (GraphQL, no API key)
 - **Coverage**: 40+ source databases, ~100 k drug-gene interactions
 - **Paper**: Freshour et al., *Nucleic Acids Res.* 2024; 52(D1):D1227-D1235. DOI: [10.1093/nar/gkac1046](https://doi.org/10.1093/nar/gkac1046)
+
+## CLI Usage (Fallback)
+
+When vibe coding fails, run the skill script directly from the command line:
+
+```bash
+python skills/dti/dgidb/dgidb_skill.py <entity1> [entity2] ...
+```
+
+**Example:**
+```bash
+python skills/dti/dgidb/dgidb_skill.py EGFR
+```
+
+The script imports functions from the sibling `example.py`, executes the query, and prints LLM-readable results to stdout.

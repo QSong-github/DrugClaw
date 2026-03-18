@@ -151,3 +151,18 @@ python 17_TTD.py TTDTARGET00001
 - **`drugs` in target results** lists all TTD-linked drugs; filter `clinical_status == "Approved"` for marketed drugs.
 - **Disease partial matching** — `"lung cancer"` will match `"non-small-cell lung cancer"`. The first candidate is returned; use `entity_type="disease"` with a more specific name if needed.
 - **Multi-value fields** (e.g. multiple pathways for one target) are returned as lists.
+
+## CLI Usage (Fallback)
+
+When vibe coding fails, run the skill script directly from the command line:
+
+```bash
+python skills/dti/ttd/ttd_skill.py <entity1> [entity2] ...
+```
+
+**Example:**
+```bash
+python skills/dti/ttd/ttd_skill.py aspirin
+```
+
+The script imports functions from the sibling `example.py`, executes the query, and prints LLM-readable results to stdout.

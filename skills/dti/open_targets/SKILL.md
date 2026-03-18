@@ -65,3 +65,18 @@ See `if __name__ == "__main__"` block in `12_Open_Targets_Platform.py` for runna
 - **Endpoint**: `https://api.platform.opentargets.org/api/v4/graphql`
 - **Docs**: https://platform.opentargets.org/
 - **Paper**: https://doi.org/10.1093/nar/gkac1046
+
+## CLI Usage (Fallback)
+
+When vibe coding fails, run the skill script directly from the command line:
+
+```bash
+python skills/dti/open_targets/open_targets_skill.py <entity1> [entity2] ...
+```
+
+**Example:**
+```bash
+python skills/dti/open_targets/open_targets_skill.py ENSG00000157764
+```
+
+The script imports functions from the sibling `example.py`, executes the query, and prints LLM-readable results to stdout.

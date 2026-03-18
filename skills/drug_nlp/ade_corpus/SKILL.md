@@ -79,3 +79,18 @@ Each entity is matched case-insensitively against both drug names and adverse ev
 - `query()` returns a **JSON string** directly consumable by LLMs.
 - `stats()` returns corpus-level counts (total relations, unique drugs/AEs).
 - No external dependencies — stdlib only (`os`, `json`, `collections`).
+
+## CLI Usage (Fallback)
+
+When vibe coding fails, run the skill script directly from the command line:
+
+```bash
+python skills/drug_nlp/ade_corpus/ade_corpus_skill.py <entity1> [entity2] ...
+```
+
+**Example:**
+```bash
+python skills/drug_nlp/ade_corpus/ade_corpus_skill.py aspirin
+```
+
+The script imports functions from the sibling `example.py`, executes the query, and prints LLM-readable results to stdout.

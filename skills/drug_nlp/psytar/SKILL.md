@@ -103,3 +103,18 @@ flat = m.to_json(m.search("Cymbalta"))
   https://doi.org/10.1016/j.dib.2019.103838
 - **Stats**: 891 reviews, 6 009 sentences, 4 813 ADR + 590 WD + 1 219 SSI
   + 792 DI mentions, 918 UMLS / 755 SNOMED concepts
+
+## CLI Usage (Fallback)
+
+When vibe coding fails, run the skill script directly from the command line:
+
+```bash
+python skills/drug_nlp/psytar/psytar_skill.py <entity1> [entity2] ...
+```
+
+**Example:**
+```bash
+python skills/drug_nlp/psytar/psytar_skill.py sertraline
+```
+
+The script imports functions from the sibling `example.py`, executes the query, and prints LLM-readable results to stdout.

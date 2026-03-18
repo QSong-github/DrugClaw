@@ -128,3 +128,18 @@ query(entities, fields="all", pred_limit=50) -> list[dict]
 - Data is **lazy-loaded**: first `query()` call triggers a one-time index build (may take seconds for large predications file).
 - UMLS semantic type codes in predications: `phsu` = pharmaceutical substance, `dsyn` = disease/syndrome, `gngm` = gene/genome, `sosy` = sign/symptom, `podg` = patient/group, etc.
 - The GitHub sample `predications.txt` has only 100 lines; for full coverage, download the complete file per the repo README instructions.
+
+## CLI Usage (Fallback)
+
+When vibe coding fails, run the skill script directly from the command line:
+
+```bash
+python skills/drug_disease/sematyp/sematyp_skill.py <entity1> [entity2] ...
+```
+
+**Example:**
+```bash
+python skills/drug_disease/sematyp/sematyp_skill.py aspirin
+```
+
+The script imports functions from the sibling `example.py`, executes the query, and prints LLM-readable results to stdout.

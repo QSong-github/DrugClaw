@@ -55,3 +55,18 @@ output.
 | `benefitsReview` | str | Free-text review of benefits |
 | `sideEffectsReview` | str | Free-text review of side effects |
 | `commentsReview` | str | Free-text general comments |
+
+## CLI Usage (Fallback)
+
+When vibe coding fails, run the skill script directly from the command line:
+
+```bash
+python skills/drug_review/drugs_com_reviews/drugs_com_reviews_skill.py <entity1> [entity2] ...
+```
+
+**Example:**
+```bash
+python skills/drug_review/drugs_com_reviews/drugs_com_reviews_skill.py metformin
+```
+
+The script imports functions from the sibling `example.py`, executes the query, and prints LLM-readable results to stdout.

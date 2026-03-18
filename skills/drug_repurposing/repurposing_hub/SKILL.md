@@ -62,3 +62,18 @@ results = hub.search_batch(["metformin", "aspirin", "BRAF"])
 - **Merge**: on `pert_iname`; first sample with non-empty `InChIKey` is kept per drug
 - **Path**: `DATA_DIR` variable in `29_Drug_Repurposing_Hub.py`
 - **Citation**: Corsello SM et al. *Nature Medicine* 23, 405–408 (2017). doi:10.1038/nm.4306
+
+## CLI Usage (Fallback)
+
+When vibe coding fails, run the skill script directly from the command line:
+
+```bash
+python skills/drug_repurposing/repurposing_hub/repurposing_hub_skill.py <entity1> [entity2] ...
+```
+
+**Example:**
+```bash
+python skills/drug_repurposing/repurposing_hub/repurposing_hub_skill.py metformin
+```
+
+The script imports functions from the sibling `example.py`, executes the query, and prints LLM-readable results to stdout.

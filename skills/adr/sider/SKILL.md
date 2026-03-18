@@ -62,3 +62,18 @@ All pre-downloaded and extracted under:
 | `meddra_freq.tsv` | Side effects with frequency info |
 
 The loader auto-detects `.tsv` / `.tsv.gz` variants. Results are capped at 50 records per category for readability.
+
+## CLI Usage (Fallback)
+
+When vibe coding fails, run the skill script directly from the command line:
+
+```bash
+python skills/adr/sider/sider_skill.py <entity1> [entity2] ...
+```
+
+**Example:**
+```bash
+python skills/adr/sider/sider_skill.py aspirin
+```
+
+The script imports functions from the sibling `example.py`, executes the query, and prints LLM-readable results to stdout.

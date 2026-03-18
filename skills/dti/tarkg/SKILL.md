@@ -119,3 +119,17 @@ Compound, Gene, Disease, Pathway, Biological_Process, Anatomy.
   deduplicates edges, tags each node/edge with its hop distance.
 - Entity resolution: exact ID → exact name (case-insensitive) → substring match.
 - `max_neighbors_per_hop` (default 50) caps fan-out to prevent explosion on hub nodes.
+## CLI Usage (Fallback)
+
+When vibe coding fails, run the skill script directly from the command line:
+
+```bash
+python skills/dti/tarkg/tarkg_skill.py <entity1> [entity2] ...
+```
+
+**Example:**
+```bash
+python skills/dti/tarkg/tarkg_skill.py aspirin
+```
+
+The script imports functions from the sibling `example.py`, executes the query, and prints LLM-readable results to stdout.

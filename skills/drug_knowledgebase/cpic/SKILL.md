@@ -114,3 +114,18 @@ On error: `{"query": "xxx", "error": "..."}`.
 - Gene symbols are auto-detected (uppercase, ≤12 chars) and routed to `genesymbol` filter.
 - Drug names are fuzzy-matched via `ilike` on the `/v1/drug` table.
 - No rate limit documented, but keep requests reasonable.
+
+## CLI Usage (Fallback)
+
+When vibe coding fails, run the skill script directly from the command line:
+
+```bash
+python skills/drug_knowledgebase/cpic/cpic_skill.py <entity1> [entity2] ...
+```
+
+**Example:**
+```bash
+python skills/drug_knowledgebase/cpic/cpic_skill.py warfarin
+```
+
+The script imports functions from the sibling `example.py`, executes the query, and prints LLM-readable results to stdout.

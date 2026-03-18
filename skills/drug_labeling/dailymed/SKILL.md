@@ -57,3 +57,18 @@ detail = dm.get_label_detail(hits[0]["setid"])
 - **Base URL**: `https://dailymed.nlm.nih.gov/dailymed/services/v2`
 - **Auth**: None (public API)
 - **Note**: Search (`/spls.json`) and NDC lookup (`/spls.json?ndc=...`) return JSON. Detail endpoint (`/spls/{setid}.xml`) is XML-only; parsed to dict automatically.
+
+## CLI Usage (Fallback)
+
+When vibe coding fails, run the skill script directly from the command line:
+
+```bash
+python skills/drug_labeling/dailymed/dailymed_skill.py <entity1> [entity2] ...
+```
+
+**Example:**
+```bash
+python skills/drug_labeling/dailymed/dailymed_skill.py aspirin
+```
+
+The script imports functions from the sibling `example.py`, executes the query, and prints LLM-readable results to stdout.

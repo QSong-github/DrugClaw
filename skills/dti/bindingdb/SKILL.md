@@ -58,3 +58,18 @@ See `if __name__ == "__main__"` block in `26_BindingDB.py` for runnable examples
 - **Size**: 3.2M data points, 1.4M compounds, 11.4K targets
 - **Access**: Public REST API (JSON), no authentication required
 - **Citation**: BindingDB in 2024: a FAIR knowledgebase of protein-small molecule binding data. *Nucleic Acids Research*, 53(D1), D1633 (2025). DOI: 10.1093/nar/gkae1199
+
+## CLI Usage (Fallback)
+
+When vibe coding fails, run the skill script directly from the command line:
+
+```bash
+python skills/dti/bindingdb/bindingdb_skill.py <entity1> [entity2] ...
+```
+
+**Example:**
+```bash
+python skills/dti/bindingdb/bindingdb_skill.py P00533
+```
+
+The script imports functions from the sibling `example.py`, executes the query, and prints LLM-readable results to stdout.

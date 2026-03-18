@@ -61,3 +61,18 @@ See `if __name__ == "__main__"` block in `45_STITCH.py` for runnable examples co
 - **Fallback URL**: `https://string-db.org/api` (STITCH data merged into STRING 12+)
 - **Auth**: None (public API; rate-limited — avoid parallel bulk requests)
 - **Species**: Default 9606 (Homo sapiens); pass NCBI taxonomy ID for other organisms
+
+## CLI Usage (Fallback)
+
+When vibe coding fails, run the skill script directly from the command line:
+
+```bash
+python skills/dti/stitch/stitch_skill.py <entity1> [entity2] ...
+```
+
+**Example:**
+```bash
+python skills/dti/stitch/stitch_skill.py aspirin
+```
+
+The script imports functions from the sibling `example.py`, executes the query, and prints LLM-readable results to stdout.

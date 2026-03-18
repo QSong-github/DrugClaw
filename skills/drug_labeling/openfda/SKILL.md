@@ -41,3 +41,18 @@ See `if __name__ == "__main__"` block in `05_openFDA_Human_Drug.py` for runnable
 - Long text fields (`indications`, `warnings`, etc.) are truncated to keep payloads concise.
 - On HTTP/query errors the result dict contains an `error` key for that term.
 - Endpoint: `https://api.fda.gov/drug/label.json`
+
+## CLI Usage (Fallback)
+
+When vibe coding fails, run the skill script directly from the command line:
+
+```bash
+python skills/drug_labeling/openfda/openfda_skill.py <entity1> [entity2] ...
+```
+
+**Example:**
+```bash
+python skills/drug_labeling/openfda/openfda_skill.py aspirin
+```
+
+The script imports functions from the sibling `example.py`, executes the query, and prints LLM-readable results to stdout.

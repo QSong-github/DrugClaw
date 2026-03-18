@@ -108,3 +108,18 @@ print(json.dumps(mt.to_json(hits[:5]), indent=2))
 # File already at:
 # /blue/qsong1/wang.qing/AgentLLM/DrugClaw/resources_metadata/dti/Molecular Target Data/WEB_DATA_PROTEIN.TXT
 ```
+
+## CLI Usage (Fallback)
+
+When vibe coding fails, run the skill script directly from the command line:
+
+```bash
+python skills/dti/molecular_targets_data/molecular_targets_data_skill.py <entity1> [entity2] ...
+```
+
+**Example:**
+```bash
+python skills/dti/molecular_targets_data/molecular_targets_data_skill.py imatinib
+```
+
+The script imports functions from the sibling `example.py`, executes the query, and prints LLM-readable results to stdout.

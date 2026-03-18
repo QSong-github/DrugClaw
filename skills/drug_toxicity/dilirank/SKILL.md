@@ -58,3 +58,18 @@ See `if __name__ == "__main__"` block in `48_LTKB.py` for runnable examples cove
 - **Source**: FDA LTKB — <https://www.fda.gov/science-research/bioinformatics-tools/liver-toxicity-knowledge-base-ltkb>
 - **Files**: `Drug Induced Liver Injury Rank (DILIrank 2.0) Dataset  FDA.xlsx`, `DILIst Supplementary Table.xlsx`
 - **Path**: `DATA_DIR` variable in `48_LTKB.py`
+
+## CLI Usage (Fallback)
+
+When vibe coding fails, run the skill script directly from the command line:
+
+```bash
+python skills/drug_toxicity/dilirank/dilirank_skill.py <entity1> [entity2] ...
+```
+
+**Example:**
+```bash
+python skills/drug_toxicity/dilirank/dilirank_skill.py aspirin
+```
+
+The script imports functions from the sibling `example.py`, executes the query, and prints LLM-readable results to stdout.

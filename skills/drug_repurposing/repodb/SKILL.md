@@ -36,3 +36,18 @@ See `if __name__ == "__main__"` block in `repodb_query.py` for runnable examples
 - **Source**: `full.csv` (comma or tab separated, auto-detected)
 - **Columns**: `drug_name`, `drugbank_id`, `ind_name`, `ind_id`, `NCT`, `status`, `phase`, `DetailedStatus`
 - **Path**: `DATA_PATH` variable in `repodb_query.py`
+
+## CLI Usage (Fallback)
+
+When vibe coding fails, run the skill script directly from the command line:
+
+```bash
+python skills/drug_repurposing/repodb/repodb_skill.py <entity1> [entity2] ...
+```
+
+**Example:**
+```bash
+python skills/drug_repurposing/repodb/repodb_skill.py metformin
+```
+
+The script imports functions from the sibling `example.py`, executes the query, and prints LLM-readable results to stdout.

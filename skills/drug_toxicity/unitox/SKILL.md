@@ -55,3 +55,18 @@ See `if __name__ == "__main__"` block in `28_UniTox.py` for runnable examples co
 - **Columns**: `generic_name`, 8 × (`*_reasoning`, `*_ternary_rating`, `*_binary_rating`), `smiles`, `all_smiles`, `SPL_ID`
 - **Path**: `DATA_PATH` variable in `28_UniTox.py`
 - **Method**: GPT-4o extraction from FDA drug labels; 85–96% clinician concordance
+
+## CLI Usage (Fallback)
+
+When vibe coding fails, run the skill script directly from the command line:
+
+```bash
+python skills/drug_toxicity/unitox/unitox_skill.py <entity1> [entity2] ...
+```
+
+**Example:**
+```bash
+python skills/drug_toxicity/unitox/unitox_skill.py aspirin
+```
+
+The script imports functions from the sibling `example.py`, executes the query, and prints LLM-readable results to stdout.

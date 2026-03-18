@@ -105,3 +105,18 @@ If an entity is not found: `{"query": "xyz", "found": false}`.
 ## Dependencies
 
 Python 3.10+ standard library only (`xml.etree.ElementTree`, `json`, `os`, `collections`). No third-party packages required.
+
+## CLI Usage (Fallback)
+
+When vibe coding fails, run the skill script directly from the command line:
+
+```bash
+python skills/drug_nlp/ddi_corpus/ddi_corpus_skill.py <entity1> [entity2] ...
+```
+
+**Example:**
+```bash
+python skills/drug_nlp/ddi_corpus/ddi_corpus_skill.py aspirin warfarin
+```
+
+The script imports functions from the sibling `example.py`, executes the query, and prints LLM-readable results to stdout.

@@ -92,3 +92,18 @@ If a name cannot be resolved, the entry contains `{"query": "xxx", "error": "No 
 - Rate limit: no official cap, but keep requests reasonable (~1 req/sec).
 - Drug IDs look like `D00109` or `dr:D00109`; both formats accepted.
 - Not all drugs have interaction or target annotations — empty list means no data.
+
+## CLI Usage (Fallback)
+
+When vibe coding fails, run the skill script directly from the command line:
+
+```bash
+python skills/ddi/kegg_drug/kegg_drug_skill.py <entity1> [entity2] ...
+```
+
+**Example:**
+```bash
+python skills/ddi/kegg_drug/kegg_drug_skill.py aspirin
+```
+
+The script imports functions from the sibling `example.py`, executes the query, and prints LLM-readable results to stdout.

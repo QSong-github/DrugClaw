@@ -22,6 +22,26 @@ from pathlib import Path
 from collections import defaultdict
 from typing import Any, Dict, List, Optional, Set
 
+# --- CLI entry-point (inserted before relative imports) -------------------
+import sys as _sys, os as _os
+if __name__ == "__main__" and len(_sys.argv) > 1:
+    _skill_dir = _os.path.dirname(_os.path.abspath(__file__))
+    if _skill_dir not in _sys.path:
+        _sys.path.insert(0, _skill_dir)
+    _entities = _sys.argv[1:]
+    try:
+        import example as _ex
+
+        _triples = _ex.load_pharmkg()
+        _idx = __ex.build_index(_triples)
+        for _e in _entities:
+            _hits = _ex.search(_triples, _e, index=_idx)
+            print(_ex.summarize(_hits, _e))
+    except Exception as _exc:
+        print(f"Error: {_exc}", _sys.stderr)
+        _sys.exit(1)
+    _sys.exit(0)
+# --------------------------------------------------------------------------
 from ...base import RAGSkill, RetrievalResult, AccessMode
 
 logger = logging.getLogger(__name__)

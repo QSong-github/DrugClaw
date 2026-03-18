@@ -82,3 +82,18 @@ single-drug query, batch query, text summary, and JSON output.
 - **OnSIDES**: Tanaka Y et al. OnSIDES database: Extracting adverse drug events from drug labels using NLP models. *Med*. 2025;100642. doi:10.1016/j.medj.2025.100642
 - **OffSIDES / TwoSIDES**: Tatonetti NP et al. Data-driven prediction of drug effects and interactions. *Sci Transl Med*. 2012;4(125):125ra31. doi:10.1126/scitranslmed.3003377
 - **KidSIDES**: Giangreco NP, Tatonetti NP. A database of pediatric drug effects to evaluate ontogenic mechanisms. *Med*. 2022.
+
+## CLI Usage (Fallback)
+
+When vibe coding fails, run the skill script directly from the command line:
+
+```bash
+python skills/adr/nsides/nsides_skill.py <entity1> [entity2] ...
+```
+
+**Example:**
+```bash
+python skills/adr/nsides/nsides_skill.py aspirin
+```
+
+The script imports functions from the sibling `example.py`, executes the query, and prints LLM-readable results to stdout.

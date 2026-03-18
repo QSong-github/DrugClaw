@@ -52,3 +52,18 @@ See `if __name__ == "__main__"` block in `chembl_query.py` for runnable examples
 
 - **API**: `https://www.ebi.ac.uk/chembl/api/data` (no key required)
 - **Paper**: https://doi.org/10.1093/nar/gkad1004
+
+## CLI Usage (Fallback)
+
+When vibe coding fails, run the skill script directly from the command line:
+
+```bash
+python skills/dti/chembl/chembl_skill.py <entity1> [entity2] ...
+```
+
+**Example:**
+```bash
+python skills/dti/chembl/chembl_skill.py aspirin ibuprofen
+```
+
+The script imports functions from the sibling `example.py`, executes the query, and prints LLM-readable results to stdout.

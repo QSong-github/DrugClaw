@@ -39,3 +39,18 @@ Each interaction row contains: `DDInterID_A`, `Drug_A`, `DDInterID_B`, `Drug_B`,
 - **Source**: 8 CSV files partitioned by ATC code (`ddinter_downloads_code_{A,B,D,H,L,P,R,V}.csv`)
 - **Path**: `/blue/qsong1/wang.qing/AgentLLM/DrugClaw/resources_metadata/ddi/DDInter/`
 - **Citation**: Xiong G, et al. *Nucleic Acids Res.* 2025;53(D1):D1356. DDInter 2.0.
+
+## CLI Usage (Fallback)
+
+When vibe coding fails, run the skill script directly from the command line:
+
+```bash
+python skills/ddi/ddinter/ddinter_skill.py <entity1> [entity2] ...
+```
+
+**Example:**
+```bash
+python skills/ddi/ddinter/ddinter_skill.py aspirin
+```
+
+The script imports functions from the sibling `example.py`, executes the query, and prints LLM-readable results to stdout.

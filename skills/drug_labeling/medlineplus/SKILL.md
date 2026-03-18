@@ -70,3 +70,18 @@ summarize, and JSON output.
 - **Rate limit**: 85 requests / minute / IP
 - **Update frequency**: daily (Tue–Sat)
 - **License**: Public domain (U.S. Government work); attribution to MedlinePlus.gov requested
+
+## CLI Usage (Fallback)
+
+When vibe coding fails, run the skill script directly from the command line:
+
+```bash
+python skills/drug_labeling/medlineplus/medlineplus_skill.py <entity1> [entity2] ...
+```
+
+**Example:**
+```bash
+python skills/drug_labeling/medlineplus/medlineplus_skill.py aspirin
+```
+
+The script imports functions from the sibling `example.py`, executes the query, and prints LLM-readable results to stdout.

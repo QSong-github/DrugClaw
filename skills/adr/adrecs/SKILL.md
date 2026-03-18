@@ -52,3 +52,18 @@ See `if __name__ == "__main__"` block in `62_ADReCS.py` for runnable examples co
 ## Citation
 
 Cai MC et al. (2015) ADReCS: an ontology database for aiding standardization and hierarchical classification of adverse drug reaction terms. *Nucleic Acids Research* 43(D1):D907–D913.
+
+## CLI Usage (Fallback)
+
+When vibe coding fails, run the skill script directly from the command line:
+
+```bash
+python skills/adr/adrecs/adrecs_skill.py <entity1> [entity2] ...
+```
+
+**Example:**
+```bash
+python skills/adr/adrecs/adrecs_skill.py aspirin
+```
+
+The script imports functions from the sibling `example.py`, executes the query, and prints LLM-readable results to stdout.

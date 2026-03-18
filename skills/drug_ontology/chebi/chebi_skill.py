@@ -18,6 +18,24 @@ import urllib.parse
 import urllib.request
 from typing import Any, Dict, List, Optional
 
+# --- CLI entry-point (inserted before relative imports) -------------------
+import sys as _sys, os as _os
+if __name__ == "__main__" and len(_sys.argv) > 1:
+    _skill_dir = _os.path.dirname(_os.path.abspath(__file__))
+    if _skill_dir not in _sys.path:
+        _sys.path.insert(0, _skill_dir)
+    _entities = _sys.argv[1:]
+    try:
+        import example as _ex
+
+        for _e in _entities:
+            _results = _ex.search(_e)
+            print(_ex.summarize(_results, _e))
+    except Exception as _exc:
+        print(f"Error: {_exc}", _sys.stderr)
+        _sys.exit(1)
+    _sys.exit(0)
+# --------------------------------------------------------------------------
 from ...base import RAGSkill, RetrievalResult, CLISkillMixin, AccessMode
 
 logger = logging.getLogger(__name__)

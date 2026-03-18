@@ -40,3 +40,18 @@ See `if __name__ == "__main__"` block in `16_RepurposeDrugs.py` for runnable exa
 - **Derived**: `NCT_IDs` (list of NCT identifiers extracted from `Merged_RefNew` URL)
 - **Scale**: 4 314 compounds × 1 756 indications, 28 148 drug-disease pairs
 - **Path**: `DATA_PATH` variable in `16_RepurposeDrugs.py`
+
+## CLI Usage (Fallback)
+
+When vibe coding fails, run the skill script directly from the command line:
+
+```bash
+python skills/drug_repurposing/repurposedrugs/repurposedrugs_skill.py <entity1> [entity2] ...
+```
+
+**Example:**
+```bash
+python skills/drug_repurposing/repurposedrugs/repurposedrugs_skill.py metformin
+```
+
+The script imports functions from the sibling `example.py`, executes the query, and prints LLM-readable results to stdout.

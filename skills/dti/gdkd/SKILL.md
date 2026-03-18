@@ -44,3 +44,18 @@ batch search, and JSON output.
 - **Core columns**: `Disease`, `Gene`, `Variant`, `Description`, `Effect`
 - **Association slots**: up to 8 per row, each with `Association_N`, `Therapeutic context_N`, `Status_N`, `Evidence_N`, `PMID_N`
 - **Path**: `DATA_PATH` variable in `16_GDKD.py`
+
+## CLI Usage (Fallback)
+
+When vibe coding fails, run the skill script directly from the command line:
+
+```bash
+python skills/dti/gdkd/gdkd_skill.py <entity1> [entity2] ...
+```
+
+**Example:**
+```bash
+python skills/dti/gdkd/gdkd_skill.py imatinib
+```
+
+The script imports functions from the sibling `example.py`, executes the query, and prints LLM-readable results to stdout.

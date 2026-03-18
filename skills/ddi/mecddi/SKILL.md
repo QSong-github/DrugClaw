@@ -55,3 +55,18 @@ See `if __name__ == "__main__"` block in `19_MecDDI.py` for runnable examples co
 3. **Batch query** → `search_batch(data, ["Meclizine", "Isocarboxazid", "D0853"])`
 4. **JSON output** → `to_json(hits)`
 5. **LLM-friendly summary** → `summarize(hits, entity)`
+
+## CLI Usage (Fallback)
+
+When vibe coding fails, run the skill script directly from the command line:
+
+```bash
+python skills/ddi/mecddi/mecddi_skill.py <entity1> [entity2] ...
+```
+
+**Example:**
+```bash
+python skills/ddi/mecddi/mecddi_skill.py aspirin
+```
+
+The script imports functions from the sibling `example.py`, executes the query, and prints LLM-readable results to stdout.

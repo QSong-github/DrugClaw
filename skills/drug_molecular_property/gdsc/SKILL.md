@@ -102,3 +102,18 @@ Agent: calls query_gdsc("Erlotinib")
        → source: screened_compounds_rel_8.4.csv, TARGET: EGFR, PATHWAY: EGFR signaling
        → "Erlotinib targets EGFR (EGFR signaling pathway) according to GDSC."
 ```
+
+## CLI Usage (Fallback)
+
+When vibe coding fails, run the skill script directly from the command line:
+
+```bash
+python skills/drug_molecular_property/gdsc/gdsc_skill.py <entity1> [entity2] ...
+```
+
+**Example:**
+```bash
+python skills/drug_molecular_property/gdsc/gdsc_skill.py erlotinib
+```
+
+The script imports functions from the sibling `example.py`, executes the query, and prints LLM-readable results to stdout.

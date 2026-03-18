@@ -40,3 +40,18 @@ See `if __name__ == "__main__"` block in `10_WebMD_Drug_Reviews.py` for runnable
 - **Ratings**: 1-5 star scale for Effectiveness, EaseofUse, Satisfaction
 - **Path**: `DATA_PATH` variable in `10_WebMD_Drug_Reviews.py`
   (`/blue/qsong1/wang.qing/AgentLLM/DrugClaw/resources_metadata/drug_review/WebMDDrugReviews/webmd.csv`)
+
+## CLI Usage (Fallback)
+
+When vibe coding fails, run the skill script directly from the command line:
+
+```bash
+python skills/drug_review/webmd/webmd_skill.py <entity1> [entity2] ...
+```
+
+**Example:**
+```bash
+python skills/drug_review/webmd/webmd_skill.py metformin
+```
+
+The script imports functions from the sibling `example.py`, executes the query, and prints LLM-readable results to stdout.

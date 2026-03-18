@@ -50,3 +50,18 @@ drug name search, ADR text search, MedDRA code lookup, batch search, JSON output
 - **Stats**: ~1,250 documents, ~7,600 entity annotations
 - **Path**: `DATA_PATH` variable in `34_CADEC.py`
 - **Citation**: Karimi et al., 2015. *J Biomed Inform* 55:73–81
+
+## CLI Usage (Fallback)
+
+When vibe coding fails, run the skill script directly from the command line:
+
+```bash
+python skills/drug_nlp/cadec/cadec_skill.py <entity1> [entity2] ...
+```
+
+**Example:**
+```bash
+python skills/drug_nlp/cadec/cadec_skill.py lipitor
+```
+
+The script imports functions from the sibling `example.py`, executes the query, and prints LLM-readable results to stdout.
