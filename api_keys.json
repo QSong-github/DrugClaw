@@ -1,0 +1,9 @@
+{
+  "api_key": "<your-api-key>",
+  "base_url": "<your-base-url>",
+  "model": "gpt-5.4-mini",
+  "api_mode": "responses",
+  "max_tokens": 40000,
+  "timeout": 100,
+  "temperature": 0.7
+}
