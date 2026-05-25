@@ -28,7 +28,7 @@ Maintainer-oriented smoke scripts, helper utilities, and archived reference asse
 
 Tracked minimal subtree that keeps the CLI, demos, and tests runnable right after `git clone`. This directory is the starting point for contributors and automated checks.
 
-The full resource overlay bundle lives on the project's [Hugging Face mirror](https://huggingface.co/datasets/Mike2481/DrugClaw_resources_data). Extracting that tarball at the repository root overlays additional files on top of `resources_metadata/` to unlock broader `LOCAL_FILE` coverage. Maintainers can inspect the builder and validator under `maintainers/resources/`.
+The full resource overlay bundle will be released upon paper acceptance. Once available, extracting that tarball at the repository root overlays additional files on top of `resources_metadata/` to unlock broader `LOCAL_FILE` coverage. Maintainers can inspect the builder and validator under `maintainers/resources/`.
 
 ### `support/`
 
