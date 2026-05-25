@@ -7,11 +7,11 @@
 </p>
 
 <p align="center">
-  <a href="./support/DrugClaw_Paper.pdf">Technical Report</a>
-  &nbsp;·&nbsp;
   <a href="./README_CN.md">中文文档 / Chinese Version</a>
-  &nbsp;·&nbsp;
-  <a href="https://huggingface.co/datasets/Mike2481/DrugClaw_resources_data">Full Resources</a>
+</p>
+
+<p align="center">
+  <em>Resource bundle will be released upon acceptance.</em>
 </p>
 
 <p align="center">
@@ -36,7 +36,7 @@ If this is your first time using DrugClaw, follow the steps below and you should
 ### 1. Clone the repository
 
 ```bash
-git clone https://github.com/QSong-github/DrugClaw
+git clone https://anonymous.4open.science/r/DrugClaw-01A3
 cd DrugClaw
 ```
 
@@ -56,7 +56,7 @@ Create the file and provide at least these fields:
 {
   "api_key": "<your-api-key>",
   "base_url": "<your-base-url>",
-  "model": "gpt-5.4-mini"
+  "model": "gpt-5-mini"
 }
 ```
 
@@ -115,13 +115,13 @@ Use minimal mode if you want to:
 
 ### Full Mode
 
-If you need deeper and broader local evidence coverage, download `resources_metadata_full.tar.gz` from the [Hugging Face resource mirror](https://huggingface.co/datasets/Mike2481/DrugClaw_resources_data), then extract it at the repository root:
+If you need deeper and broader local evidence coverage, the full `resources_metadata_full.tar.gz` bundle will be released upon paper acceptance. Once available, extract it at the repository root:
 
 ```bash
 tar -xzf resources_metadata_full.tar.gz
 ```
 
-Recommended flow:
+Recommended flow (once the bundle is released):
 
 1. Download `resources_metadata_full.tar.gz`
 2. Extract it at the repository root

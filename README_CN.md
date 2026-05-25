@@ -7,11 +7,11 @@
 </p>
 
 <p align="center">
-  <a href="./support/DrugClaw_Paper.pdf">项目技术报告</a>
-  &nbsp;·&nbsp;
   <a href="./README.md">English Version</a>
-  &nbsp;·&nbsp;
-  <a href="https://huggingface.co/datasets/Mike2481/DrugClaw_resources_data">全量资源镜像</a>
+</p>
+
+<p align="center">
+  <em>资源包将在论文录用后释出。</em>
 </p>
 
 <p align="center">
@@ -36,7 +36,7 @@ DrugClaw 是一个面向药物问题的 CLI 与 agent runtime，强调基于证�
 ### 1. 克隆仓库并进入目录
 
 ```bash
-git clone https://github.com/QSong-github/DrugClaw
+git clone https://anonymous.4open.science/r/DrugClaw-01A3
 cd DrugClaw
 ```
 
@@ -56,7 +56,7 @@ DrugClaw 默认会读取仓库根目录下的 `navigator_api_keys.json`。如果
 {
   "api_key": "<your-api-key>",
   "base_url": "<your-base-url>",
-  "model": "gpt-5.4-mini"
+  "model": "gpt-5-mini"
 }
 ```
 
@@ -115,13 +115,13 @@ python -m drugclaw list
 
 ### 全量模式
 
-如果你需要更深入、更全面的本地证据覆盖，可以从 [Hugging Face 资源镜像](https://huggingface.co/datasets/Mike2481/DrugClaw_resources_data) 下载 `resources_metadata_full.tar.gz`，然后在仓库根目录解压：
+如果你需要更深入、更全面的本地证据覆盖，全量资源包 `resources_metadata_full.tar.gz` 将在论文录用后释出。释出后，在仓库根目录解压：
 
 ```bash
 tar -xzf resources_metadata_full.tar.gz
 ```
 
-推荐顺序是：
+推荐顺序是（待资源包释出后）：
 
 1. 下载 `resources_metadata_full.tar.gz`
 2. 在仓库根目录解压到当前目录
