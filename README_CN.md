@@ -46,9 +46,9 @@ cd DrugClaw
 pip install -e .
 ```
 
-### 3. 准备 `navigator_api_keys.json`
+### 3. 准备 `api_keys.json`
 
-DrugClaw 默认会读取仓库根目录下的 `navigator_api_keys.json`。如果你不想额外传 `--key-file`，就直接把配置文件放在仓库根目录。
+DrugClaw 默认会读取仓库根目录下的 `api_keys.json`。如果你不想额外传 `--key-file`，就直接把配置文件放在仓库根目录。
 
 请新建这个文件，并至少填写以下字段：
 
