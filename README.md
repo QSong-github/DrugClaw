@@ -46,9 +46,9 @@ cd DrugClaw
 pip install -e .
 ```
 
-### 3. Create `navigator_api_keys.json`
+### 3. Create `api_keys.json`
 
-DrugClaw reads `navigator_api_keys.json` from the repository root by default. If you do not want to pass `--key-file`, put the config file at the repository root.
+DrugClaw reads `api_keys.json` from the repository root by default. If you do not want to pass `--key-file`, put the config file at the repository root.
 
 Create the file and provide at least these fields:
 
