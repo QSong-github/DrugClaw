@@ -12,7 +12,7 @@
 
 <p align="center">
   <em>Resource bundle will be released upon acceptance.</em>
-</p>
+</p>999
 
 <p align="center">
   <img alt="Domain" src="https://img.shields.io/badge/Domain-Drug%20Intelligence-1f6feb">
@@ -155,6 +155,12 @@ python -m drugclaw doctor
 python -m drugclaw demo
 ```
 
+# Citation
+If you find this project is useful for your research, please cite:
+```
+Wang Q, Li B, Liang J, Shi D, Zhang B, Song Q. DrugClaw and DrugAudit: A primary-source-grounded agent and authority-aware benchmark for drug-information question answering. arXiv. 2026; arXiv:2606.01434.
+
+```
 ## Read More
 
 - Repository guide: `docs/repository-guide.md`
