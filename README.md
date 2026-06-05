@@ -7,14 +7,17 @@
 </p>
 
 <p align="center">
+  <a href="https://arxiv.org/abs/2606.01434">📄 Paper (arXiv)</a>
+  ·
   <a href="./README_CN.md">中文文档 / Chinese Version</a>
 </p>
 
 <p align="center">
   <em>Resource bundle will be released upon acceptance.</em>
-</p>999
+</p>
 
 <p align="center">
+  <a href="https://arxiv.org/abs/2606.01434"><img alt="arXiv" src="https://img.shields.io/badge/arXiv-2606.01434-b31b1b"></a>
   <img alt="Domain" src="https://img.shields.io/badge/Domain-Drug%20Intelligence-1f6feb">
   <img alt="Registry" src="https://img.shields.io/badge/Registry-Source%20of%20Truth-0a7f5a">
   <img alt="Skills" src="https://img.shields.io/badge/Skills-Registry%20Driven-f59e0b">
@@ -158,7 +161,7 @@ python -m drugclaw demo
 # Citation
 If you find this project is useful for your research, please cite:
 ```
-Wang Q, Li B, Liang J, Shi D, Zhang B, Song Q. DrugClaw and DrugAudit: A primary-source-grounded agent and authority-aware benchmark for drug-information question answering. arXiv. 2026; arXiv:2606.01434.
+Wang Q, Li B, Liang J, Shi D, Zhang B, Song Q. DrugClaw and DrugAudit: A primary-source-grounded agent and authority-aware benchmark for drug-information question answering. arXiv. 2026; arXiv:2606.01434. https://arxiv.org/abs/2606.01434
 
 ```
 ## Read More
