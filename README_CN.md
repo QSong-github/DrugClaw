@@ -7,6 +7,8 @@
 </p>
 
 <p align="center">
+  <a href="https://arxiv.org/abs/2606.01434">📄 论文 (arXiv)</a>
+  ·
   <a href="./README.md">English Version</a>
 </p>
 
@@ -15,6 +17,7 @@
 </p>
 
 <p align="center">
+  <a href="https://arxiv.org/abs/2606.01434"><img alt="arXiv" src="https://img.shields.io/badge/arXiv-2606.01434-b31b1b"></a>
   <img alt="Domain" src="https://img.shields.io/badge/Domain-Drug%20Intelligence-1f6feb">
   <img alt="Registry" src="https://img.shields.io/badge/Registry-Source%20of%20Truth-0a7f5a">
   <img alt="Skills" src="https://img.shields.io/badge/Skills-Registry%20Driven-f59e0b">
@@ -153,6 +156,13 @@ python -m drugclaw doctor
 
 ```bash
 python -m drugclaw demo
+```
+
+# 引用
+如果本项目对你的研究有帮助，请引用：
+```
+Wang Q, Li B, Liang J, Shi D, Zhang B, Song Q. DrugClaw and DrugAudit: A primary-source-grounded agent and authority-aware benchmark for drug-information question answering. arXiv. 2026; arXiv:2606.01434. https://arxiv.org/abs/2606.01434
+
 ```
 
 ## 进一步阅读
